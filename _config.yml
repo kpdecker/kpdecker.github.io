@@ -28,6 +28,7 @@ permalink: /:year/:month/:title/
 
 header_pages:
   - "about.md"
+  - "blog/index.html"
   - "gradient-scanner.md"
 
 paginate: 5
