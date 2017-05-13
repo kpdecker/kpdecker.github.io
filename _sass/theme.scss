@@ -1,0 +1,156 @@
+/**
+ * Reset some basic elements
+ */
+body, h1, h2, h3, h4, h5, h6,
+p, blockquote, pre, hr,
+dl, dd, ol, ul, figure {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  color: #444;
+  background: #dbd9c8;
+}
+
+a,
+a:visited {
+  color: #529900;
+  text-decoration: none;
+}
+
+.mdl-layout__header {
+  background: $header-color;
+
+  .mdl-layout__title {
+    color: white;
+  }
+}
+.mdl-mini-footer {
+  background: $header-color-light;
+}
+
+.mdl-layout__content {
+  display: flex;
+  flex-direction: column;
+}
+
+.portfolio-header {
+  position: relative;
+
+  height: 25vh;
+  max-height: 300px;
+  flex-shrink: 0;
+
+  background-image: url(green-banner.jpg);
+  background-size: cover;
+  background-position: center;
+
+  &:after {
+    content: " ";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+
+    background: rgba(0, 0, 0, 0.5);
+  }
+}
+
+.avatar {
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+.centered-content {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto auto auto;
+  padding: 0;
+}
+
+.page-heading {
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.post-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  h2 {
+    margin: 0;
+  }
+}
+.post-link {
+  display: block;
+  font-size: 24px;
+}
+
+.mdl-logo {
+  margin-bottom: 16px;
+  color: #fff
+}
+@media screen and (min-width:760px) {
+  .mdl-logo {
+    float: left;
+    margin-bottom: 0;
+    margin-right: 16px
+  }
+}
+.mdl-logo {
+  float: none;
+  font-size: 18px;
+  margin: 0;
+  
+}
+
+.mdl-mini-footer {
+  display: block;
+
+
+  a,
+  a:visited {
+    color: #9fdc96;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    list-style: none;
+  }
+}
+.footer-links {
+  display: flex;
+  align-items: center;
+
+  > * {
+    flex-basis: 100%;
+  }
+  > p {
+    text-align: right;
+    margin: 0;
+  }
+}
+
+.mdl-cell--right > p {
+  text-align: right;
+}
+
+.social-media-list {
+  text-align: center;
+
+  > li {
+    display: inline-block;
+    margin: 0 10px;
+  }
+  .icon > svg {
+    width: 48px;
+    height: 48px;
+  }
+}

@@ -18,13 +18,24 @@ description: >
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 
+author: Kevin Decker
 twitter_username: kpdecker
 github_username:  kpdecker
 linkedin_username:  kpdecker
-resume: kpdecker.github.io/resume/
+resume: https://kpdecker.github.io/resume/
+
+permalink: /:year/:month/:title/
+
+header_pages:
+  - "about.md"
+  - "gradient-scanner.md"
 
 # Build settings
 markdown: kramdown
+kramdown:
+ input: GFM
+ hard_wrap: false
+
 theme: minima
 gems:
   - jekyll-feed

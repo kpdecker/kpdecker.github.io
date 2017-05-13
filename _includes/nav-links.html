@@ -1,0 +1,14 @@
+{% assign default_paths = site.pages | map: "path" %}
+{% assign page_paths = site.header_pages | default: default_paths %}
+{% if page_paths %}
+  <nav class="mdl-navigation mdl-typography--body-1-force-preferred-font">
+    {% for path in page_paths %}
+      {% assign my_page = site.pages | where: "path", path | first %}
+      {% assign redirect = my_page.redirect.to %}
+      {% assign url = my_page.url | relative_url %}
+      {% if my_page.title %}
+      <a class="mdl-navigation__link" href="{{ redirect | default: url }}">{{ my_page.title | escape }}</a>
+      {% endif %}
+    {% endfor %}
+  </nav>
+{% endif %}
