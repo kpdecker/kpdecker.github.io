@@ -12,6 +12,7 @@ layout: default
       </time>
     </p>
   </header>
+  <hr />
 
   <div class="post-content" itemprop="articleBody">
     {{ content }}
@@ -20,4 +21,16 @@ layout: default
   {% if site.disqus.shortname %}
     {% include disqus_comments.html %}
   {% endif %}
+
+
+  <div class="post-navigation">
+    {% if page.next.url %}
+      <a href="{{page.next.url}}">&laquo; {{page.next.title}}</a>
+    {% else %}
+      <div></div>
+    {% endif %}
+    {% if page.previous.url %}
+      <a href="{{page.previous.url}}">{{page.previous.title}} &raquo;</a>
+    {% endif %}
+  </div>
 </article>
