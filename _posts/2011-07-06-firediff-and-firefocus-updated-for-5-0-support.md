@@ -12,7 +12,7 @@ tags:
 - Firefocus
 - Web Development
 ---
-<p>
-Both Firediff and Firefocus have been updated to increase the target application support up to Firefox 5.0.</p>
-<p>
-Both of these are available from the update stream on this site. New installations are recommended to use the <a href="https://addons.mozilla.org/en-US/firefox/addon/firediff/">Firediff</a> and <a href="https://addons.mozilla.org/en-US/firefox/addon/firefocus/">Firefocus</a> projects on AMO as these will be more responsive to the march of Firefox releases.</p>
+
+Both Firediff and Firefocus have been updated to increase the target application support up to Firefox 5.0.
+
+Both of these are available from the update stream on this site. New installations are recommended to use the [Firediff](https://addons.mozilla.org/en-US/firefox/addon/firediff/) and [Firefocus](https://addons.mozilla.org/en-US/firefox/addon/firefocus/) projects on AMO as these will be more responsive to the march of Firefox releases.
