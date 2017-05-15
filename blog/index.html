@@ -24,6 +24,8 @@ title: Blog
     {% endfor %}
   </ul>
 
+  <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | relative_url }}">via RSS</a></p>
+
   <!-- Pagination links -->
   <div class="pagination">
     {% if paginator.previous_page %}
@@ -34,6 +36,4 @@ title: Blog
       <a href="{{ paginator.next_page_path }}" class="next">Next</a>
     {% endif %}
   </div>
-
-  <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | relative_url }}">via RSS</a></p>
 </div>
