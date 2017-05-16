@@ -50,5 +50,6 @@ gems:
   - jekyll-autoprefixer
 
 exclude:
+  - sources
   - Gemfile
   - Gemfile.lock
