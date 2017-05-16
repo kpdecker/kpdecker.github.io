@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.4.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2017-05-16T03:39:03-05:00</updated><id>http://localhost:4000/</id><title type="html">incaseofstairs</title><subtitle>Personal musings on software engineering with a skew towards frontend engineering.
-</subtitle><author><name>Kevin Decker</name></author><entry><title type="html">ES6 Feature Performance</title><link href="http://localhost:4000/2015/06/es6-feature-performance/" rel="alternate" type="text/html" title="ES6 Feature Performance" /><published>2015-06-25T19:25:06-05:00</published><updated>2015-06-25T19:25:06-05:00</updated><id>http://localhost:4000/2015/06/es6-feature-performance</id><content type="html" xml:base="http://localhost:4000/2015/06/es6-feature-performance/">&lt;p&gt;With ES6 features landing quickly in native browsers and readily available for use through Babel and Traceur, it seemed like it was time to look not just at &lt;a href=&quot;https://kangax.github.io/compat-table/es6/&quot;&gt;support&lt;/a&gt;, but also the performance impact of using these features under the current implementations.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.4.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2017-05-16T06:58:21-05:00</updated><id>http://localhost:4000/</id><title type="html">incaseofstairs</title><subtitle>Personal musings on software engineering.</subtitle><author><name>Kevin Decker</name></author><entry><title type="html">ES6 Feature Performance</title><link href="http://localhost:4000/2015/06/es6-feature-performance/" rel="alternate" type="text/html" title="ES6 Feature Performance" /><published>2015-06-25T19:25:06-05:00</published><updated>2015-06-25T19:25:06-05:00</updated><id>http://localhost:4000/2015/06/es6-feature-performance</id><content type="html" xml:base="http://localhost:4000/2015/06/es6-feature-performance/">&lt;p&gt;With ES6 features landing quickly in native browsers and readily available for use through Babel and Traceur, it seemed like it was time to look not just at &lt;a href=&quot;https://kangax.github.io/compat-table/es6/&quot;&gt;support&lt;/a&gt;, but also the performance impact of using these features under the current implementations.&lt;/p&gt;
 
 &lt;p&gt;While there is great promise for the future, the picture of ES6 feature performance today is very muddled and depends on the specific feature being used. Some such as bindings and simple arrow/destructuring are ready for use today, others such as generators and tagged template strings might require analysis before using.&lt;/p&gt;
 
@@ -45,7 +44,7 @@
 &lt;tr id=&quot;user-content-test-arrow&quot;&gt;
 &lt;th rowspan=&quot;4&quot;&gt;
           arrow&lt;br /&gt;
-          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/arrow)
+          &lt;a href=&quot;https://github.com/kpdecker/six-speed/tree/master/tests/arrow&quot;&gt;tests&lt;/a&gt;
         &lt;/th&gt;
 &lt;th&gt;babel&lt;/th&gt;
 &lt;td&gt;1.3x slower&lt;/td&gt;
@@ -105,7 +104,7 @@
 &lt;tr id=&quot;user-content-test-arrow-args&quot;&gt;
 &lt;th rowspan=&quot;3&quot;&gt;
           arrow-args&lt;br /&gt;
-          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/arrow-args)
+          &lt;a href=&quot;https://github.com/kpdecker/six-speed/tree/master/tests/arrow-args&quot;&gt;tests&lt;/a&gt;
         &lt;/th&gt;
 &lt;th&gt;babel&lt;/th&gt;
 &lt;td&gt;Identical&lt;/td&gt;
@@ -151,7 +150,7 @@
 &lt;tr id=&quot;user-content-test-arrow-declare&quot;&gt;
 &lt;th rowspan=&quot;3&quot;&gt;
           arrow-declare&lt;br /&gt;
-          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/arrow-declare)
+          &lt;a href=&quot;https://github.com/kpdecker/six-speed/tree/master/tests/arrow-declare&quot;&gt;tests&lt;/a&gt;
         &lt;/th&gt;
 &lt;th&gt;babel&lt;/th&gt;
 &lt;td&gt;1.3x slower&lt;/td&gt;
@@ -237,7 +236,7 @@
 &lt;tr id=&quot;user-content-test-classes&quot;&gt;
 &lt;th rowspan=&quot;4&quot;&gt;
           classes&lt;br /&gt;
-          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/classes)
+          &lt;a href=&quot;https://github.com/kpdecker/six-speed/tree/master/tests/classes&quot;&gt;tests&lt;/a&gt;
         &lt;/th&gt;
 &lt;th&gt;babel&lt;/th&gt;
 &lt;td&gt;2.3x slower&lt;/td&gt;
@@ -297,7 +296,7 @@
 &lt;tr id=&quot;user-content-test-super&quot;&gt;
 &lt;th rowspan=&quot;4&quot;&gt;
           super&lt;br /&gt;
-          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/super)
+          &lt;a href=&quot;https://github.com/kpdecker/six-speed/tree/master/tests/super&quot;&gt;tests&lt;/a&gt;
         &lt;/th&gt;
 &lt;th&gt;babel&lt;/th&gt;
 &lt;td&gt;24x slower&lt;/td&gt;
@@ -397,7 +396,7 @@
 &lt;tr id=&quot;user-content-test-object-literal-ext&quot;&gt;
 &lt;th rowspan=&quot;4&quot;&gt;
           object-literal-ext&lt;br /&gt;
-          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/object-literal-ext)
+          &lt;a href=&quot;https://github.com/kpdecker/six-speed/tree/master/tests/object-literal-ext&quot;&gt;tests&lt;/a&gt;
         &lt;/th&gt;
 &lt;th&gt;babel&lt;/th&gt;
 &lt;td&gt;4x slower&lt;/td&gt;
@@ -504,7 +503,7 @@
 &lt;tr id=&quot;user-content-test-template_string&quot;&gt;
 &lt;th rowspan=&quot;3&quot;&gt;
           template_string&lt;br /&gt;
-          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/template_string)
+          &lt;a href=&quot;https://github.com/kpdecker/six-speed/tree/master/tests/template_string&quot;&gt;tests&lt;/a&gt;
         &lt;/th&gt;
 &lt;th&gt;babel&lt;/th&gt;
 &lt;td&gt;Identical&lt;/td&gt;
@@ -550,7 +549,7 @@
 &lt;tr id=&quot;user-content-test-template_string_tag&quot;&gt;
 &lt;th rowspan=&quot;4&quot;&gt;
           template_string_tag&lt;br /&gt;
-          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/template_string_tag)
+          &lt;a href=&quot;https://github.com/kpdecker/six-speed/tree/master/tests/template_string_tag&quot;&gt;tests&lt;/a&gt;
         &lt;/th&gt;
 &lt;th&gt;babel&lt;/th&gt;
 &lt;td&gt;567x slower&lt;/td&gt;
@@ -642,7 +641,7 @@
 &lt;tr id=&quot;user-content-test-destructuring&quot;&gt;
 &lt;th rowspan=&quot;4&quot;&gt;
           destructuring&lt;br /&gt;
-          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/destructuring)
+          &lt;a href=&quot;https://github.com/kpdecker/six-speed/tree/master/tests/destructuring&quot;&gt;tests&lt;/a&gt;
         &lt;/th&gt;
 &lt;th&gt;babel&lt;/th&gt;
 &lt;td&gt;1.8x slower&lt;/td&gt;
@@ -702,7 +701,7 @@
 &lt;tr id=&quot;user-content-test-destructuring-simple&quot;&gt;
 &lt;th rowspan=&quot;3&quot;&gt;
           destructuring-simple&lt;br /&gt;
-          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/destructuring-simple)
+          &lt;a href=&quot;https://github.com/kpdecker/six-speed/tree/master/tests/destructuring-simple&quot;&gt;tests&lt;/a&gt;
         &lt;/th&gt;
 &lt;th&gt;babel&lt;/th&gt;
 &lt;td&gt;Identical&lt;/td&gt;
@@ -794,7 +793,7 @@ NOTE The ExpectedArgumentCount of a FormalParameterList is the number of FormalP
 &lt;tr id=&quot;user-content-test-classes&quot;&gt;
 &lt;th rowspan=&quot;4&quot;&gt;
           classes&lt;br /&gt;
-          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/classes)
+          &lt;a href=&quot;https://github.com/kpdecker/six-speed/tree/master/tests/classes&quot;&gt;tests&lt;/a&gt;
         &lt;/th&gt;
 &lt;th&gt;babel&lt;/th&gt;
 &lt;td&gt;2.3x slower&lt;/td&gt;
@@ -854,7 +853,7 @@ NOTE The ExpectedArgumentCount of a FormalParameterList is the number of FormalP
 &lt;tr id=&quot;user-content-test-defaults&quot;&gt;
 &lt;th rowspan=&quot;3&quot;&gt;
           defaults&lt;br /&gt;
-          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/defaults)
+          &lt;a href=&quot;https://github.com/kpdecker/six-speed/tree/master/tests/defaults&quot;&gt;tests&lt;/a&gt;
         &lt;/th&gt;
 &lt;th&gt;babel&lt;/th&gt;
 &lt;td&gt;17x slower&lt;/td&gt;
@@ -932,7 +931,7 @@ NOTE The ExpectedArgumentCount of a FormalParameterList is the number of FormalP
 &lt;tr id=&quot;user-content-test-rest&quot;&gt;
 &lt;th rowspan=&quot;3&quot;&gt;
           rest&lt;br /&gt;
-          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/rest)
+          &lt;a href=&quot;https://github.com/kpdecker/six-speed/tree/master/tests/rest&quot;&gt;tests&lt;/a&gt;
         &lt;/th&gt;
 &lt;th&gt;babel&lt;/th&gt;
 &lt;td&gt;Identical&lt;/td&gt;
@@ -1010,7 +1009,7 @@ NOTE The ExpectedArgumentCount of a FormalParameterList is the number of FormalP
 &lt;tr id=&quot;user-content-test-spread&quot;&gt;
 &lt;th rowspan=&quot;3&quot;&gt;
           spread&lt;br /&gt;
-          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/spread)
+          &lt;a href=&quot;https://github.com/kpdecker/six-speed/tree/master/tests/spread&quot;&gt;tests&lt;/a&gt;
         &lt;/th&gt;
 &lt;th&gt;babel&lt;/th&gt;
 &lt;td&gt;Identical&lt;/td&gt;
@@ -1056,7 +1055,7 @@ NOTE The ExpectedArgumentCount of a FormalParameterList is the number of FormalP
 &lt;tr id=&quot;user-content-test-spread-generator&quot;&gt;
 &lt;th rowspan=&quot;4&quot;&gt;
           spread-generator&lt;br /&gt;
-          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/spread-generator)
+          &lt;a href=&quot;https://github.com/kpdecker/six-speed/tree/master/tests/spread-generator&quot;&gt;tests&lt;/a&gt;
         &lt;/th&gt;
 &lt;th&gt;babel&lt;/th&gt;
 &lt;td&gt;150x slower&lt;/td&gt;
@@ -1116,7 +1115,7 @@ NOTE The ExpectedArgumentCount of a FormalParameterList is the number of FormalP
 &lt;tr id=&quot;user-content-test-spread-literal&quot;&gt;
 &lt;th rowspan=&quot;3&quot;&gt;
           spread-literal&lt;br /&gt;
-          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/spread-literal)
+          &lt;a href=&quot;https://github.com/kpdecker/six-speed/tree/master/tests/spread-literal&quot;&gt;tests&lt;/a&gt;
         &lt;/th&gt;
 &lt;th&gt;babel&lt;/th&gt;
 &lt;td&gt;Identical&lt;/td&gt;
@@ -1194,7 +1193,7 @@ NOTE The ExpectedArgumentCount of a FormalParameterList is the number of FormalP
 &lt;tr id=&quot;user-content-test-bindings&quot;&gt;
 &lt;th rowspan=&quot;3&quot;&gt;
           bindings&lt;br /&gt;
-          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/bindings)
+          &lt;a href=&quot;https://github.com/kpdecker/six-speed/tree/master/tests/bindings&quot;&gt;tests&lt;/a&gt;
         &lt;/th&gt;
 &lt;th&gt;babel&lt;/th&gt;
 &lt;td&gt;Identical&lt;/td&gt;
@@ -1272,7 +1271,7 @@ NOTE The ExpectedArgumentCount of a FormalParameterList is the number of FormalP
 &lt;tr id=&quot;user-content-test-for-of-array&quot;&gt;
 &lt;th rowspan=&quot;4&quot;&gt;
           for-of-array&lt;br /&gt;
-          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/for-of-array)
+          &lt;a href=&quot;https://github.com/kpdecker/six-speed/tree/master/tests/for-of-array&quot;&gt;tests&lt;/a&gt;
         &lt;/th&gt;
 &lt;th&gt;babel&lt;/th&gt;
 &lt;td&gt;21x slower&lt;/td&gt;
@@ -1332,7 +1331,7 @@ NOTE The ExpectedArgumentCount of a FormalParameterList is the number of FormalP
 &lt;tr id=&quot;user-content-test-for-of-object&quot;&gt;
 &lt;th rowspan=&quot;4&quot;&gt;
           for-of-object&lt;br /&gt;
-          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/for-of-object)
+          &lt;a href=&quot;https://github.com/kpdecker/six-speed/tree/master/tests/for-of-object&quot;&gt;tests&lt;/a&gt;
         &lt;/th&gt;
 &lt;th&gt;babel&lt;/th&gt;
 &lt;td&gt;10x slower&lt;/td&gt;
@@ -1424,7 +1423,7 @@ NOTE The ExpectedArgumentCount of a FormalParameterList is the number of FormalP
 &lt;tr id=&quot;user-content-test-generator&quot;&gt;
 &lt;th rowspan=&quot;3&quot;&gt;
           generator&lt;br /&gt;
-          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/generator)
+          &lt;a href=&quot;https://github.com/kpdecker/six-speed/tree/master/tests/generator&quot;&gt;tests&lt;/a&gt;
         &lt;/th&gt;
 &lt;th&gt;babel&lt;/th&gt;
 &lt;td&gt;601x slower&lt;/td&gt;
@@ -1512,7 +1511,7 @@ NOTE The ExpectedArgumentCount of a FormalParameterList is the number of FormalP
 &lt;tr id=&quot;user-content-test-map-set&quot;&gt;
 &lt;th rowspan=&quot;3&quot;&gt;
           map-set&lt;br /&gt;
-          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/map-set)
+          &lt;a href=&quot;https://github.com/kpdecker/six-speed/tree/master/tests/map-set&quot;&gt;tests&lt;/a&gt;
         &lt;/th&gt;
 &lt;th&gt;babel&lt;/th&gt;
 &lt;td&gt;13x slower&lt;/td&gt;
@@ -1590,7 +1589,7 @@ NOTE The ExpectedArgumentCount of a FormalParameterList is the number of FormalP
 &lt;tr id=&quot;user-content-test-promises&quot;&gt;
 &lt;th rowspan=&quot;3&quot;&gt;
           promises&lt;br /&gt;
-          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/promises)
+          &lt;a href=&quot;https://github.com/kpdecker/six-speed/tree/master/tests/promises&quot;&gt;tests&lt;/a&gt;
         &lt;/th&gt;
 &lt;th&gt;babel&lt;/th&gt;
 &lt;td&gt;Identical&lt;/td&gt;
