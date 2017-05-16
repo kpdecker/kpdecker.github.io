@@ -22,7 +22,7 @@ layout: default
     {% assign url = project.path | relative_url %}
 
     <li>
-      <div class="mdl-card">
+      <a href="{{ redirect | default: url }}" class="mdl-card">
         <div class="mdl-card__title">
           <span class="mdl-card__title-text">{{ project.title | escape }}</span>
         </div>
@@ -30,11 +30,11 @@ layout: default
           <img src="{{ site.url }}/{{ project.logo }}">
         </div>
         <div class="mdl-card__actions">
-          <a href="{{ redirect | default: url }}" class="mdl-button mdl-button--colored">
+          <div class="mdl-button mdl-button--colored">
             More Info
-          </a>
+          </div>
         </div>
-      </div>
+      </a>
     </li>
   {% endfor %}
   </ul>
