@@ -70,6 +70,7 @@ hr {
 }
 
 .centered-content {
+  box-sizing: border-box;
   flex-grow: 1;
   width: 100%;
   max-width: 800px;
@@ -134,24 +135,6 @@ hr {
   justify-content: space-between;
 }
 
-.mdl-logo {
-  margin-bottom: 16px;
-  color: #fff
-}
-@media screen and (min-width:760px) {
-  .mdl-logo {
-    float: left;
-    margin-bottom: 0;
-    margin-right: 16px
-  }
-}
-.mdl-logo {
-  float: none;
-  font-size: 18px;
-  margin: 0;
-  
-}
-
 .mdl-mini-footer {
   display: block;
 
@@ -167,6 +150,12 @@ hr {
 .footer-links {
   display: flex;
   align-items: center;
+
+  @include media-query($on-palm) {
+    > p {
+      display: none;
+    }
+  }
 
   > * {
     flex-basis: 100%;
