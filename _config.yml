@@ -12,9 +12,7 @@
 # in the templates via {{ site.myvariable }}.
 title: incaseofstairs
 email: kpdecker@gmail.com
-description: >
-  Personal musings on software engineering with a skew towards
-  frontend engineering.
+description: Personal musings on software engineering.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 
