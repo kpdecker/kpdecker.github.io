@@ -57,7 +57,7 @@ Arrow function declaration on the other hand is slightly slower than the most op
 <tr id="user-content-test-arrow">
 <th rowspan="4">
           arrow<br />
-          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/arrow)
+          <a href="https://github.com/kpdecker/six-speed/tree/master/tests/arrow">tests</a>
         </th>
 <th>babel</th>
 <td>1.3x slower</td>
@@ -117,7 +117,7 @@ Arrow function declaration on the other hand is slightly slower than the most op
 <tr id="user-content-test-arrow-args">
 <th rowspan="3">
           arrow-args<br />
-          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/arrow-args)
+          <a href="https://github.com/kpdecker/six-speed/tree/master/tests/arrow-args">tests</a>
         </th>
 <th>babel</th>
 <td>Identical</td>
@@ -163,7 +163,7 @@ Arrow function declaration on the other hand is slightly slower than the most op
 <tr id="user-content-test-arrow-declare">
 <th rowspan="3">
           arrow-declare<br />
-          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/arrow-declare)
+          <a href="https://github.com/kpdecker/six-speed/tree/master/tests/arrow-declare">tests</a>
         </th>
 <th>babel</th>
 <td>1.3x slower</td>
@@ -249,7 +249,7 @@ Babel's loose implementation of `super` is akin to that of the ES5 implementatio
 <tr id="user-content-test-classes">
 <th rowspan="4">
           classes<br />
-          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/classes)
+          <a href="https://github.com/kpdecker/six-speed/tree/master/tests/classes">tests</a>
         </th>
 <th>babel</th>
 <td>2.3x slower</td>
@@ -309,7 +309,7 @@ Babel's loose implementation of `super` is akin to that of the ES5 implementatio
 <tr id="user-content-test-super">
 <th rowspan="4">
           super<br />
-          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/super)
+          <a href="https://github.com/kpdecker/six-speed/tree/master/tests/super">tests</a>
         </th>
 <th>babel</th>
 <td>24x slower</td>
@@ -409,7 +409,7 @@ Object literal extensions generally provide an overhead of up to 147x the baseli
 <tr id="user-content-test-object-literal-ext">
 <th rowspan="4">
           object-literal-ext<br />
-          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/object-literal-ext)
+          <a href="https://github.com/kpdecker/six-speed/tree/master/tests/object-literal-ext">tests</a>
         </th>
 <th>babel</th>
 <td>4x slower</td>
@@ -516,7 +516,7 @@ Issues:
 <tr id="user-content-test-template_string">
 <th rowspan="3">
           template_string<br />
-          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/template_string)
+          <a href="https://github.com/kpdecker/six-speed/tree/master/tests/template_string">tests</a>
         </th>
 <th>babel</th>
 <td>Identical</td>
@@ -562,7 +562,7 @@ Issues:
 <tr id="user-content-test-template_string_tag">
 <th rowspan="4">
           template_string_tag<br />
-          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/template_string_tag)
+          <a href="https://github.com/kpdecker/six-speed/tree/master/tests/template_string_tag">tests</a>
         </th>
 <th>babel</th>
 <td>567x slower</td>
@@ -654,7 +654,7 @@ For destructuring, the average use case effectively matches that of the ES5 coun
 <tr id="user-content-test-destructuring">
 <th rowspan="4">
           destructuring<br />
-          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/destructuring)
+          <a href="https://github.com/kpdecker/six-speed/tree/master/tests/destructuring">tests</a>
         </th>
 <th>babel</th>
 <td>1.8x slower</td>
@@ -714,7 +714,7 @@ For destructuring, the average use case effectively matches that of the ES5 coun
 <tr id="user-content-test-destructuring-simple">
 <th rowspan="3">
           destructuring-simple<br />
-          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/destructuring-simple)
+          <a href="https://github.com/kpdecker/six-speed/tree/master/tests/destructuring-simple">tests</a>
         </th>
 <th>babel</th>
 <td>Identical</td>
@@ -806,7 +806,7 @@ The only native implementation, Firefox, performed identically to the ES5 implem
 <tr id="user-content-test-classes">
 <th rowspan="4">
           classes<br />
-          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/classes)
+          <a href="https://github.com/kpdecker/six-speed/tree/master/tests/classes">tests</a>
         </th>
 <th>babel</th>
 <td>2.3x slower</td>
@@ -866,7 +866,7 @@ The only native implementation, Firefox, performed identically to the ES5 implem
 <tr id="user-content-test-defaults">
 <th rowspan="3">
           defaults<br />
-          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/defaults)
+          <a href="https://github.com/kpdecker/six-speed/tree/master/tests/defaults">tests</a>
         </th>
 <th>babel</th>
 <td>17x slower</td>
@@ -944,7 +944,7 @@ Rest parameters are as fast or faster than the ES5 equivalent under almost all i
 <tr id="user-content-test-rest">
 <th rowspan="3">
           rest<br />
-          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/rest)
+          <a href="https://github.com/kpdecker/six-speed/tree/master/tests/rest">tests</a>
         </th>
 <th>babel</th>
 <td>Identical</td>
@@ -1022,7 +1022,7 @@ Under Babel, spread parameters for arrays perform identically to the ES5 counter
 <tr id="user-content-test-spread">
 <th rowspan="3">
           spread<br />
-          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/spread)
+          <a href="https://github.com/kpdecker/six-speed/tree/master/tests/spread">tests</a>
         </th>
 <th>babel</th>
 <td>Identical</td>
@@ -1068,7 +1068,7 @@ Under Babel, spread parameters for arrays perform identically to the ES5 counter
 <tr id="user-content-test-spread-generator">
 <th rowspan="4">
           spread-generator<br />
-          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/spread-generator)
+          <a href="https://github.com/kpdecker/six-speed/tree/master/tests/spread-generator">tests</a>
         </th>
 <th>babel</th>
 <td>150x slower</td>
@@ -1128,7 +1128,7 @@ Under Babel, spread parameters for arrays perform identically to the ES5 counter
 <tr id="user-content-test-spread-literal">
 <th rowspan="3">
           spread-literal<br />
-          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/spread-literal)
+          <a href="https://github.com/kpdecker/six-speed/tree/master/tests/spread-literal">tests</a>
         </th>
 <th>babel</th>
 <td>Identical</td>
@@ -1206,7 +1206,7 @@ Under Babel, spread parameters for arrays perform identically to the ES5 counter
 <tr id="user-content-test-bindings">
 <th rowspan="3">
           bindings<br />
-          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/bindings)
+          <a href="https://github.com/kpdecker/six-speed/tree/master/tests/bindings">tests</a>
         </th>
 <th>babel</th>
 <td>Identical</td>
@@ -1284,7 +1284,7 @@ Under Babel, spread parameters for arrays perform identically to the ES5 counter
 <tr id="user-content-test-for-of-array">
 <th rowspan="4">
           for-of-array<br />
-          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/for-of-array)
+          <a href="https://github.com/kpdecker/six-speed/tree/master/tests/for-of-array">tests</a>
         </th>
 <th>babel</th>
 <td>21x slower</td>
@@ -1344,7 +1344,7 @@ Under Babel, spread parameters for arrays perform identically to the ES5 counter
 <tr id="user-content-test-for-of-object">
 <th rowspan="4">
           for-of-object<br />
-          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/for-of-object)
+          <a href="https://github.com/kpdecker/six-speed/tree/master/tests/for-of-object">tests</a>
         </th>
 <th>babel</th>
 <td>10x slower</td>
@@ -1436,7 +1436,7 @@ Much like `for..of`, generators are also quite a bit slower than a raw ES5 imple
 <tr id="user-content-test-generator">
 <th rowspan="3">
           generator<br />
-          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/generator)
+          <a href="https://github.com/kpdecker/six-speed/tree/master/tests/generator">tests</a>
         </th>
 <th>babel</th>
 <td>601x slower</td>
@@ -1524,7 +1524,7 @@ Take caution with these numbers. The tests use a data set of size 500 and other 
 <tr id="user-content-test-map-set">
 <th rowspan="3">
           map-set<br />
-          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/map-set)
+          <a href="https://github.com/kpdecker/six-speed/tree/master/tests/map-set">tests</a>
         </th>
 <th>babel</th>
 <td>13x slower</td>
@@ -1602,7 +1602,7 @@ Promises are across the board faster with both the polyfill and native implement
 <tr id="user-content-test-promises">
 <th rowspan="3">
           promises<br />
-          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/promises)
+          <a href="https://github.com/kpdecker/six-speed/tree/master/tests/promises">tests</a>
         </th>
 <th>babel</th>
 <td>Identical</td>
