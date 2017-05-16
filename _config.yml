@@ -36,6 +36,8 @@ kramdown:
  hard_wrap: false
 
 theme: minima
+sass:
+  style: compressed
 autoprefixer:
   browsers:
   - last 2 versions
