@@ -15,7 +15,11 @@ layout: default
   Cupim ground round ham cow bresaola andouille sausage brisket rump pig beef ribs. Turducken alcatra ham hock pork bacon boudin picanha salami flank, tenderloin kevin sausage. Turducken meatball andouille porchetta biltong turkey pig frankfurter tri-tip cupim cow ball tip. Pork chop porchetta biltong, cow leberkas pig chicken sausage cupim salami short loin. Pork loin tenderloin tongue, tail prosciutto ribeye bacon biltong pastrami.
   </p>
 
-  <h2>Projects</h2>  
+  <h2>Latest Post</h2>
+  {% assign post = site.posts | first %}
+  {% include blog-exerpt.html %}
+
+  <h2>Projects</h2>
   <ul class="project-list">
   {% for project in site.data.projects %}
     {% assign redirect = project.href %}
