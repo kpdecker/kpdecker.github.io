@@ -25,6 +25,10 @@ figcaption {
   margin-top: $spacing-unit;
   margin-bottom: $spacing-unit;
 
+  @include media-query($on-laptop) {
+    padding: 0 $spacing-unit;
+  }
+
   /**
    * Set `margin-bottom` to maintain vertical rhythm
    */
