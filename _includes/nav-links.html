@@ -1,0 +1,6 @@
+<nav class="mdl-navigation">
+  {% for page in site.data.header %}
+    {% assign url = page.page | relative_url %}
+    <a class="mdl-navigation__link" href="{{ url }}">{{ page.title | escape }}</a>
+  {% endfor %}
+</nav>

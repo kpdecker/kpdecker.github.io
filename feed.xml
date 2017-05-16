@@ -1,0 +1,2342 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.4.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2017-05-16T03:39:03-05:00</updated><id>http://localhost:4000/</id><title type="html">incaseofstairs</title><subtitle>Personal musings on software engineering with a skew towards frontend engineering.
+</subtitle><author><name>Kevin Decker</name></author><entry><title type="html">ES6 Feature Performance</title><link href="http://localhost:4000/2015/06/es6-feature-performance/" rel="alternate" type="text/html" title="ES6 Feature Performance" /><published>2015-06-25T19:25:06-05:00</published><updated>2015-06-25T19:25:06-05:00</updated><id>http://localhost:4000/2015/06/es6-feature-performance</id><content type="html" xml:base="http://localhost:4000/2015/06/es6-feature-performance/">&lt;p&gt;With ES6 features landing quickly in native browsers and readily available for use through Babel and Traceur, it seemed like it was time to look not just at &lt;a href=&quot;https://kangax.github.io/compat-table/es6/&quot;&gt;support&lt;/a&gt;, but also the performance impact of using these features under the current implementations.&lt;/p&gt;
+
+&lt;p&gt;While there is great promise for the future, the picture of ES6 feature performance today is very muddled and depends on the specific feature being used. Some such as bindings and simple arrow/destructuring are ready for use today, others such as generators and tagged template strings might require analysis before using.&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;p&gt;The standard warnings of premature optimization and recommendations to profile your own code apply to the comments here. These tests are very micro in their scope and might not be representative of your particular use case. It’s also possible that the ES6 version is fast enough for your use case and is not worth additional time spent refactoring to a more complicated but faster implementation.&lt;/p&gt;
+
+&lt;h2 id=&quot;results&quot;&gt;Results&lt;/h2&gt;
+
+&lt;p&gt;The results below are a snapshot from when this post was written. &lt;a href=&quot;http://kpdecker.github.io/six-speed/&quot;&gt;kpdecker.github.io/six-speed/&lt;/a&gt; has the most recent results.&lt;/p&gt;
+
+&lt;h3 id=&quot;arrow-function&quot;&gt;Arrow Function&lt;/h3&gt;
+&lt;p&gt;Arrow functions invocation has little performance impact under transpilers. Their native implementation under Firefox is 40-70x slower for calls than the equivalent ES5 operation. Internet Explorer’s performance is approximately that of ES5.&lt;/p&gt;
+
+&lt;p&gt;Arrow function declaration on the other hand is slightly slower than the most optimized ES5 implementation, under most environments. Here too Firefox’s implementation shows a large performance hit and IE shows a slight performance hit.&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;2&quot;&gt;&lt;/td&gt;
+&lt;th colspan=&quot;2&quot;&gt;node&lt;/th&gt;
+&lt;th colspan=&quot;3&quot;&gt;chrome&lt;/th&gt;
+&lt;th colspan=&quot;3&quot;&gt;firefox&lt;/th&gt;
+&lt;th colspan=&quot;2&quot;&gt;internet explorer&lt;/th&gt;
+&lt;th colspan=&quot;1&quot;&gt;safari&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;2&quot;&gt;&lt;/td&gt;
+&lt;th&gt;0.10.39&lt;/th&gt;
+&lt;th&gt;2.3.0&lt;/th&gt;
+&lt;th&gt;43&lt;/th&gt;
+&lt;th&gt;44&lt;/th&gt;
+&lt;th&gt;45&lt;/th&gt;
+&lt;th&gt;38&lt;/th&gt;
+&lt;th&gt;39&lt;/th&gt;
+&lt;th&gt;40&lt;/th&gt;
+&lt;th&gt;11&lt;/th&gt;
+&lt;th&gt;12&lt;/th&gt;
+&lt;th&gt;8&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr id=&quot;user-content-test-arrow&quot;&gt;
+&lt;th rowspan=&quot;4&quot;&gt;
+          arrow&lt;br /&gt;
+          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/arrow)
+        &lt;/th&gt;
+&lt;th&gt;babel&lt;/th&gt;
+&lt;td&gt;1.3x slower&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;1.2x faster&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;traceur&lt;/th&gt;
+&lt;td&gt;1.3x slower&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;1.3x faster&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;es5-bind&lt;/th&gt;
+&lt;td&gt;10x slower&lt;/td&gt;
+&lt;td&gt;15x slower&lt;/td&gt;
+&lt;td&gt;19x slower&lt;/td&gt;
+&lt;td&gt;14x slower&lt;/td&gt;
+&lt;td&gt;20x slower&lt;/td&gt;
+&lt;td&gt;6x slower&lt;/td&gt;
+&lt;td&gt;6x slower&lt;/td&gt;
+&lt;td&gt;7x slower&lt;/td&gt;
+&lt;td&gt;4x slower&lt;/td&gt;
+&lt;td&gt;2.6x slower&lt;/td&gt;
+&lt;td&gt;3x slower&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;es6&lt;/th&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;38x slower&lt;/td&gt;
+&lt;td&gt;41x slower&lt;/td&gt;
+&lt;td&gt;52x slower&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr id=&quot;user-content-test-arrow-args&quot;&gt;
+&lt;th rowspan=&quot;3&quot;&gt;
+          arrow-args&lt;br /&gt;
+          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/arrow-args)
+        &lt;/th&gt;
+&lt;th&gt;babel&lt;/th&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;1.2x faster&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;traceur&lt;/th&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;1.2x faster&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;es6&lt;/th&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;2.9x slower&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;64x slower&lt;/td&gt;
+&lt;td&gt;89x slower&lt;/td&gt;
+&lt;td&gt;68x slower&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;1.3x faster&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr id=&quot;user-content-test-arrow-declare&quot;&gt;
+&lt;th rowspan=&quot;3&quot;&gt;
+          arrow-declare&lt;br /&gt;
+          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/arrow-declare)
+        &lt;/th&gt;
+&lt;th&gt;babel&lt;/th&gt;
+&lt;td&gt;1.3x slower&lt;/td&gt;
+&lt;td&gt;1.3x slower&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;8x slower&lt;/td&gt;
+&lt;td&gt;10x slower&lt;/td&gt;
+&lt;td&gt;13x slower&lt;/td&gt;
+&lt;td&gt;2.3x slower&lt;/td&gt;
+&lt;td&gt;1.6x slower&lt;/td&gt;
+&lt;td&gt;1.4x slower&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;traceur&lt;/th&gt;
+&lt;td&gt;1.3x slower&lt;/td&gt;
+&lt;td&gt;1.3x slower&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;5x slower&lt;/td&gt;
+&lt;td&gt;7x slower&lt;/td&gt;
+&lt;td&gt;8x slower&lt;/td&gt;
+&lt;td&gt;2.3x slower&lt;/td&gt;
+&lt;td&gt;1.4x slower&lt;/td&gt;
+&lt;td&gt;1.4x slower&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;es6&lt;/th&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;53x slower&lt;/td&gt;
+&lt;td&gt;78x slower&lt;/td&gt;
+&lt;td&gt;78x slower&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;1.3x slower&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;Issues:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;[Firefox Native Implementation](https://bugzilla.mozilla.org/show_bug.cgi?id=1177518)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;classes&quot;&gt;Classes&lt;/h3&gt;
+
+&lt;p&gt;With classes we start to see some differences in behaviors. Traceur and the V8 native implementation operate at partity with the ES5 tests when looking at instantiation. Babel’s implementation does suffer a 1.5-60x performance hit for the operations tested. When compiling using Babel’s loose mode, the hit is lessened to 8x.&lt;/p&gt;
+
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;super&lt;/code&gt; keyword has some fairly large performance issues under all implementations, with the best case being 3x slower and the worst case being 60x slower than the respective baselines. V8’s native implementation also sees a 15-20x performance hit.&lt;/p&gt;
+
+&lt;p&gt;Babel’s loose implementation of &lt;code class=&quot;highlighter-rouge&quot;&gt;super&lt;/code&gt; is akin to that of the ES5 implementation, utilizing &lt;code class=&quot;highlighter-rouge&quot;&gt;C.prototype.bar.call(this)&lt;/code&gt; rather than the slower &lt;code class=&quot;highlighter-rouge&quot;&gt;getPrototypeOf&lt;/code&gt; lookup operation that while more accurate technically, incurs an additional cost. This is controlled by the &lt;code class=&quot;highlighter-rouge&quot;&gt;es6.classes&lt;/code&gt; parameter but Babel’s authors cite a number of &lt;a href=&quot;https://babeljs.io/docs/advanced/loose/#es6-classes&quot;&gt;warnings&lt;/a&gt; with this flag that may impact compatibility when migrating code to native implementations.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;2&quot;&gt;&lt;/td&gt;
+&lt;th colspan=&quot;2&quot;&gt;node&lt;/th&gt;
+&lt;th colspan=&quot;3&quot;&gt;chrome&lt;/th&gt;
+&lt;th colspan=&quot;3&quot;&gt;firefox&lt;/th&gt;
+&lt;th colspan=&quot;2&quot;&gt;internet explorer&lt;/th&gt;
+&lt;th colspan=&quot;1&quot;&gt;safari&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;2&quot;&gt;&lt;/td&gt;
+&lt;th&gt;0.10.39&lt;/th&gt;
+&lt;th&gt;2.3.0&lt;/th&gt;
+&lt;th&gt;43&lt;/th&gt;
+&lt;th&gt;44&lt;/th&gt;
+&lt;th&gt;45&lt;/th&gt;
+&lt;th&gt;38&lt;/th&gt;
+&lt;th&gt;39&lt;/th&gt;
+&lt;th&gt;40&lt;/th&gt;
+&lt;th&gt;11&lt;/th&gt;
+&lt;th&gt;12&lt;/th&gt;
+&lt;th&gt;8&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr id=&quot;user-content-test-classes&quot;&gt;
+&lt;th rowspan=&quot;4&quot;&gt;
+          classes&lt;br /&gt;
+          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/classes)
+        &lt;/th&gt;
+&lt;th&gt;babel&lt;/th&gt;
+&lt;td&gt;2.3x slower&lt;/td&gt;
+&lt;td&gt;1.5x slower&lt;/td&gt;
+&lt;td&gt;1.3x slower&lt;/td&gt;
+&lt;td&gt;1.4x slower&lt;/td&gt;
+&lt;td&gt;1.3x slower&lt;/td&gt;
+&lt;td&gt;27x slower&lt;/td&gt;
+&lt;td&gt;26x slower&lt;/td&gt;
+&lt;td&gt;30x slower&lt;/td&gt;
+&lt;td&gt;1.4x slower&lt;/td&gt;
+&lt;td&gt;1.5x slower&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;babel-loose&lt;/th&gt;
+&lt;td&gt;2.3x slower&lt;/td&gt;
+&lt;td&gt;1.5x slower&lt;/td&gt;
+&lt;td&gt;1.3x slower&lt;/td&gt;
+&lt;td&gt;1.4x slower&lt;/td&gt;
+&lt;td&gt;1.3x slower&lt;/td&gt;
+&lt;td&gt;6x slower&lt;/td&gt;
+&lt;td&gt;6x slower&lt;/td&gt;
+&lt;td&gt;8x slower&lt;/td&gt;
+&lt;td&gt;1.3x slower&lt;/td&gt;
+&lt;td&gt;2.4x slower&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;traceur&lt;/th&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;1.5x slower&lt;/td&gt;
+&lt;td&gt;1.7x slower&lt;/td&gt;
+&lt;td&gt;1.8x slower&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;es6&lt;/th&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr id=&quot;user-content-test-super&quot;&gt;
+&lt;th rowspan=&quot;4&quot;&gt;
+          super&lt;br /&gt;
+          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/super)
+        &lt;/th&gt;
+&lt;th&gt;babel&lt;/th&gt;
+&lt;td&gt;24x slower&lt;/td&gt;
+&lt;td&gt;60x slower&lt;/td&gt;
+&lt;td&gt;52x slower&lt;/td&gt;
+&lt;td&gt;48x slower&lt;/td&gt;
+&lt;td&gt;45x slower&lt;/td&gt;
+&lt;td&gt;60x slower&lt;/td&gt;
+&lt;td&gt;62x slower&lt;/td&gt;
+&lt;td&gt;61x slower&lt;/td&gt;
+&lt;td&gt;24x slower&lt;/td&gt;
+&lt;td&gt;24x slower&lt;/td&gt;
+&lt;td&gt;16x slower&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;babel-loose&lt;/th&gt;
+&lt;td&gt;2.0x slower&lt;/td&gt;
+&lt;td&gt;1.7x slower&lt;/td&gt;
+&lt;td&gt;1.7x slower&lt;/td&gt;
+&lt;td&gt;1.7x slower&lt;/td&gt;
+&lt;td&gt;1.7x slower&lt;/td&gt;
+&lt;td&gt;5x slower&lt;/td&gt;
+&lt;td&gt;5x slower&lt;/td&gt;
+&lt;td&gt;5x slower&lt;/td&gt;
+&lt;td&gt;3x slower&lt;/td&gt;
+&lt;td&gt;3.0x slower&lt;/td&gt;
+&lt;td&gt;1.2x slower&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;traceur&lt;/th&gt;
+&lt;td&gt;12x slower&lt;/td&gt;
+&lt;td&gt;26x slower&lt;/td&gt;
+&lt;td&gt;18x slower&lt;/td&gt;
+&lt;td&gt;18x slower&lt;/td&gt;
+&lt;td&gt;18x slower&lt;/td&gt;
+&lt;td&gt;26x slower&lt;/td&gt;
+&lt;td&gt;30x slower&lt;/td&gt;
+&lt;td&gt;27x slower&lt;/td&gt;
+&lt;td&gt;10x slower&lt;/td&gt;
+&lt;td&gt;12x slower&lt;/td&gt;
+&lt;td&gt;11x slower&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;es6&lt;/th&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;14x slower&lt;/td&gt;
+&lt;td&gt;19x slower&lt;/td&gt;
+&lt;td&gt;21x slower&lt;/td&gt;
+&lt;td&gt;18x slower&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;Issues:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;[V8](https://code.google.com/p/v8/issues/detail?id=3759)&lt;/li&gt;
+&lt;li&gt;[Firefox Class Performance](https://bugzilla.mozilla.org/show_bug.cgi?id=1167472)&lt;/li&gt;
+&lt;li&gt;[Firefox Super Property Performance](https://bugzilla.mozilla.org/show_bug.cgi?id=1169745)&lt;/li&gt;
+&lt;li&gt;[Firefox Super Call Performance](https://bugzilla.mozilla.org/show_bug.cgi?id=1169746)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;
+&lt;a id=&quot;user-content-enhanced-object-literals&quot; class=&quot;anchor&quot; href=&quot;#enhanced-object-literals&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;octicon octicon-link&quot;&gt;&lt;/span&gt;&lt;/a&gt;Enhanced Object Literals&lt;/h3&gt;
+
+&lt;p&gt;Object literal extensions generally provide an overhead of up to 147x the baseline. Under the transpiler implementations this is due to the use of &lt;code class=&quot;highlighter-rouge&quot;&gt;defineProperty&lt;/code&gt; rather than the much more optimized field assignment. This is done to bullet proof code from potential edge cases discussed &lt;a href=&quot;https://github.com/babel/babel/issues/357&quot;&gt;here&lt;/a&gt;. Loose mode is effectively the same as the ES5 implementation as of &lt;a href=&quot;https://github.com/babel/babel/issues/1820&quot;&gt;5.6.7&lt;/a&gt;&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;2&quot;&gt;&lt;/td&gt;
+&lt;th colspan=&quot;2&quot;&gt;node&lt;/th&gt;
+&lt;th colspan=&quot;3&quot;&gt;chrome&lt;/th&gt;
+&lt;th colspan=&quot;3&quot;&gt;firefox&lt;/th&gt;
+&lt;th colspan=&quot;2&quot;&gt;internet explorer&lt;/th&gt;
+&lt;th colspan=&quot;1&quot;&gt;safari&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;2&quot;&gt;&lt;/td&gt;
+&lt;th&gt;0.10.39&lt;/th&gt;
+&lt;th&gt;2.3.0&lt;/th&gt;
+&lt;th&gt;43&lt;/th&gt;
+&lt;th&gt;44&lt;/th&gt;
+&lt;th&gt;45&lt;/th&gt;
+&lt;th&gt;38&lt;/th&gt;
+&lt;th&gt;39&lt;/th&gt;
+&lt;th&gt;40&lt;/th&gt;
+&lt;th&gt;11&lt;/th&gt;
+&lt;th&gt;12&lt;/th&gt;
+&lt;th&gt;8&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr id=&quot;user-content-test-object-literal-ext&quot;&gt;
+&lt;th rowspan=&quot;4&quot;&gt;
+          object-literal-ext&lt;br /&gt;
+          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/object-literal-ext)
+        &lt;/th&gt;
+&lt;th&gt;babel&lt;/th&gt;
+&lt;td&gt;4x slower&lt;/td&gt;
+&lt;td&gt;60x slower&lt;/td&gt;
+&lt;td&gt;72x slower&lt;/td&gt;
+&lt;td&gt;71x slower&lt;/td&gt;
+&lt;td&gt;80x slower&lt;/td&gt;
+&lt;td&gt;1.8x slower&lt;/td&gt;
+&lt;td&gt;1.6x slower&lt;/td&gt;
+&lt;td&gt;1.6x slower&lt;/td&gt;
+&lt;td&gt;2.6x slower&lt;/td&gt;
+&lt;td&gt;2.0x slower&lt;/td&gt;
+&lt;td&gt;2.5x slower&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;babel-loose&lt;/th&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;12x slower&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;traceur&lt;/th&gt;
+&lt;td&gt;8x slower&lt;/td&gt;
+&lt;td&gt;120x slower&lt;/td&gt;
+&lt;td&gt;143x slower&lt;/td&gt;
+&lt;td&gt;122x slower&lt;/td&gt;
+&lt;td&gt;144x slower&lt;/td&gt;
+&lt;td&gt;3x slower&lt;/td&gt;
+&lt;td&gt;3x slower&lt;/td&gt;
+&lt;td&gt;2.9x slower&lt;/td&gt;
+&lt;td&gt;5x slower&lt;/td&gt;
+&lt;td&gt;4x slower&lt;/td&gt;
+&lt;td&gt;4x slower&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;es6&lt;/th&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;25x slower&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;23x slower&lt;/td&gt;
+&lt;td&gt;26x slower&lt;/td&gt;
+&lt;td&gt;1.4x slower&lt;/td&gt;
+&lt;td&gt;1.5x slower&lt;/td&gt;
+&lt;td&gt;1.3x slower&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;Issues:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;[Babel Optimization](https://github.com/babel/babel/pull/1830)&lt;/li&gt;
+&lt;li&gt;[V8](https://code.google.com/p/v8/issues/detail?id=4246)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;
+&lt;a id=&quot;user-content-template-strings&quot; class=&quot;anchor&quot; href=&quot;#template-strings&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;octicon octicon-link&quot;&gt;&lt;/span&gt;&lt;/a&gt;Template Strings&lt;/h3&gt;
+
+&lt;p&gt;Template strings are a mixed bag. In the basic form, transpilers are able to hit parity with the baseline implementation under most environments. The native implementations are hit or miss. Under Chrome they execute at half the speed and under Firefox up to 650x slower.&lt;/p&gt;
+
+&lt;p&gt;Tagged template strings unfortunately do not have such a nice outlook. Their performance ranged from 2x slower for IE’s native implementation to 2000x slower for Babel’s implementation under Firefox. Babel’s loose implementation (&lt;code class=&quot;highlighter-rouge&quot;&gt;es6.templateLiterals&lt;/code&gt;) lessens much of the overhead of this operation, at the cost of not having a fully compliant &lt;code class=&quot;highlighter-rouge&quot;&gt;String.raw&lt;/code&gt; implementation.&lt;/p&gt;
+
+&lt;p&gt;Issues:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;[Chrome](https://code.google.com/p/chromium/issues/detail?id=504212)&lt;/li&gt;
+&lt;li&gt;[Firefox](https://bugzilla.mozilla.org/show_bug.cgi?id=1177318)&lt;/li&gt;
+&lt;li&gt;[Babel](https://github.com/babel/babel/issues/971#issuecomment-115344157)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;2&quot;&gt;&lt;/td&gt;
+&lt;th colspan=&quot;2&quot;&gt;node&lt;/th&gt;
+&lt;th colspan=&quot;3&quot;&gt;chrome&lt;/th&gt;
+&lt;th colspan=&quot;3&quot;&gt;firefox&lt;/th&gt;
+&lt;th colspan=&quot;2&quot;&gt;internet explorer&lt;/th&gt;
+&lt;th colspan=&quot;1&quot;&gt;safari&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;2&quot;&gt;&lt;/td&gt;
+&lt;th&gt;0.10.39&lt;/th&gt;
+&lt;th&gt;2.3.0&lt;/th&gt;
+&lt;th&gt;43&lt;/th&gt;
+&lt;th&gt;44&lt;/th&gt;
+&lt;th&gt;45&lt;/th&gt;
+&lt;th&gt;38&lt;/th&gt;
+&lt;th&gt;39&lt;/th&gt;
+&lt;th&gt;40&lt;/th&gt;
+&lt;th&gt;11&lt;/th&gt;
+&lt;th&gt;12&lt;/th&gt;
+&lt;th&gt;8&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr id=&quot;user-content-test-template_string&quot;&gt;
+&lt;th rowspan=&quot;3&quot;&gt;
+          template_string&lt;br /&gt;
+          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/template_string)
+        &lt;/th&gt;
+&lt;th&gt;babel&lt;/th&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;1.5x faster&lt;/td&gt;
+&lt;td&gt;1.4x faster&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;traceur&lt;/th&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;es6&lt;/th&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;2.0x slower&lt;/td&gt;
+&lt;td&gt;2.0x slower&lt;/td&gt;
+&lt;td&gt;1.9x slower&lt;/td&gt;
+&lt;td&gt;627x slower&lt;/td&gt;
+&lt;td&gt;622x slower&lt;/td&gt;
+&lt;td&gt;591x slower&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;1.3x faster&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr id=&quot;user-content-test-template_string_tag&quot;&gt;
+&lt;th rowspan=&quot;4&quot;&gt;
+          template_string_tag&lt;br /&gt;
+          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/template_string_tag)
+        &lt;/th&gt;
+&lt;th&gt;babel&lt;/th&gt;
+&lt;td&gt;567x slower&lt;/td&gt;
+&lt;td&gt;578x slower&lt;/td&gt;
+&lt;td&gt;722x slower&lt;/td&gt;
+&lt;td&gt;755x slower&lt;/td&gt;
+&lt;td&gt;820x slower&lt;/td&gt;
+&lt;td&gt;2395x slower&lt;/td&gt;
+&lt;td&gt;2349x slower&lt;/td&gt;
+&lt;td&gt;2028x slower&lt;/td&gt;
+&lt;td&gt;90x slower&lt;/td&gt;
+&lt;td&gt;82x slower&lt;/td&gt;
+&lt;td&gt;61x slower&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;babel-loose&lt;/th&gt;
+&lt;td&gt;2.0x slower&lt;/td&gt;
+&lt;td&gt;1.6x slower&lt;/td&gt;
+&lt;td&gt;1.7x slower&lt;/td&gt;
+&lt;td&gt;1.6x slower&lt;/td&gt;
+&lt;td&gt;1.8x slower&lt;/td&gt;
+&lt;td&gt;94x slower&lt;/td&gt;
+&lt;td&gt;87x slower&lt;/td&gt;
+&lt;td&gt;84x slower&lt;/td&gt;
+&lt;td&gt;1.4x slower&lt;/td&gt;
+&lt;td&gt;1.4x slower&lt;/td&gt;
+&lt;td&gt;2.0x slower&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;traceur&lt;/th&gt;
+&lt;td&gt;7x slower&lt;/td&gt;
+&lt;td&gt;13x slower&lt;/td&gt;
+&lt;td&gt;17x slower&lt;/td&gt;
+&lt;td&gt;13x slower&lt;/td&gt;
+&lt;td&gt;16x slower&lt;/td&gt;
+&lt;td&gt;346x slower&lt;/td&gt;
+&lt;td&gt;307x slower&lt;/td&gt;
+&lt;td&gt;261x slower&lt;/td&gt;
+&lt;td&gt;13x slower&lt;/td&gt;
+&lt;td&gt;11x slower&lt;/td&gt;
+&lt;td&gt;8x slower&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;es6&lt;/th&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;8x slower&lt;/td&gt;
+&lt;td&gt;9x slower&lt;/td&gt;
+&lt;td&gt;13x slower&lt;/td&gt;
+&lt;td&gt;9x slower&lt;/td&gt;
+&lt;td&gt;68x slower&lt;/td&gt;
+&lt;td&gt;64x slower&lt;/td&gt;
+&lt;td&gt;59x slower&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3&gt;
+&lt;a id=&quot;user-content-destructuring&quot; class=&quot;anchor&quot; href=&quot;#destructuring&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;octicon octicon-link&quot;&gt;&lt;/span&gt;&lt;/a&gt;Destructuring&lt;/h3&gt;
+
+&lt;p&gt;For destructuring, the average use case effectively matches that of the ES5 counterpart. Unfortunately complex use cases, particularly those around array destructuring, often have large performance overhead. Under Babel an unoptimized helper is used to access the data and under Traceur an entire iterator structure is created, both of which provide fairly substantial memory and CPU overhead over the simple array accessor logic that hand coded ES5 can utilize. Loose mode is effectively the same as the ES5 implementation.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;2&quot;&gt;&lt;/td&gt;
+&lt;th colspan=&quot;2&quot;&gt;node&lt;/th&gt;
+&lt;th colspan=&quot;3&quot;&gt;chrome&lt;/th&gt;
+&lt;th colspan=&quot;3&quot;&gt;firefox&lt;/th&gt;
+&lt;th colspan=&quot;2&quot;&gt;internet explorer&lt;/th&gt;
+&lt;th colspan=&quot;1&quot;&gt;safari&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;2&quot;&gt;&lt;/td&gt;
+&lt;th&gt;0.10.39&lt;/th&gt;
+&lt;th&gt;2.3.0&lt;/th&gt;
+&lt;th&gt;43&lt;/th&gt;
+&lt;th&gt;44&lt;/th&gt;
+&lt;th&gt;45&lt;/th&gt;
+&lt;th&gt;38&lt;/th&gt;
+&lt;th&gt;39&lt;/th&gt;
+&lt;th&gt;40&lt;/th&gt;
+&lt;th&gt;11&lt;/th&gt;
+&lt;th&gt;12&lt;/th&gt;
+&lt;th&gt;8&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr id=&quot;user-content-test-destructuring&quot;&gt;
+&lt;th rowspan=&quot;4&quot;&gt;
+          destructuring&lt;br /&gt;
+          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/destructuring)
+        &lt;/th&gt;
+&lt;th&gt;babel&lt;/th&gt;
+&lt;td&gt;1.8x slower&lt;/td&gt;
+&lt;td&gt;1.4x slower&lt;/td&gt;
+&lt;td&gt;1.4x slower&lt;/td&gt;
+&lt;td&gt;1.2x slower&lt;/td&gt;
+&lt;td&gt;1.3x slower&lt;/td&gt;
+&lt;td&gt;24x slower&lt;/td&gt;
+&lt;td&gt;22x slower&lt;/td&gt;
+&lt;td&gt;26x slower&lt;/td&gt;
+&lt;td&gt;3x slower&lt;/td&gt;
+&lt;td&gt;5x slower&lt;/td&gt;
+&lt;td&gt;2.2x slower&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;babel-loose&lt;/th&gt;
+&lt;td&gt;1.2x faster&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;1.2x faster&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;traceur&lt;/th&gt;
+&lt;td&gt;26x slower&lt;/td&gt;
+&lt;td&gt;13x slower&lt;/td&gt;
+&lt;td&gt;12x slower&lt;/td&gt;
+&lt;td&gt;10x slower&lt;/td&gt;
+&lt;td&gt;11x slower&lt;/td&gt;
+&lt;td&gt;163x slower&lt;/td&gt;
+&lt;td&gt;152x slower&lt;/td&gt;
+&lt;td&gt;176x slower&lt;/td&gt;
+&lt;td&gt;57x slower&lt;/td&gt;
+&lt;td&gt;25x slower&lt;/td&gt;
+&lt;td&gt;8x slower&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;es6&lt;/th&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;170x slower&lt;/td&gt;
+&lt;td&gt;148x slower&lt;/td&gt;
+&lt;td&gt;185x slower&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr id=&quot;user-content-test-destructuring-simple&quot;&gt;
+&lt;th rowspan=&quot;3&quot;&gt;
+          destructuring-simple&lt;br /&gt;
+          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/destructuring-simple)
+        &lt;/th&gt;
+&lt;th&gt;babel&lt;/th&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;10x slower&lt;/td&gt;
+&lt;td&gt;1.2x slower&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;traceur&lt;/th&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;1.3x slower&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;es6&lt;/th&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;Issues:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;[Firefox](https://bugzilla.mozilla.org/show_bug.cgi?id=1177319)&lt;/li&gt;
+&lt;li&gt;[Babel Strict Optimization](https://github.com/babel/babel/pull/1821)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;
+&lt;a id=&quot;user-content-default-parameters&quot; class=&quot;anchor&quot; href=&quot;#default-parameters&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;octicon octicon-link&quot;&gt;&lt;/span&gt;&lt;/a&gt;Default Parameters&lt;/h3&gt;
+
+&lt;p&gt;Default parameters were universally slower for all transpiler implementations. They effectively compile to the same thing, utilizing the &lt;code class=&quot;highlighter-rouge&quot;&gt;arguments&lt;/code&gt; object to set a local variable vs. using a named paramemter. This appears to be unoptimzed under all engines and consequently performance was 4-2000x slower. Sadly, this is required in order to properly implement the &lt;a href=&quot;https://github.com/babel/babel/issues/1814&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;fn.length&lt;/code&gt;&lt;/a&gt; behavior defined by the spec:&lt;/p&gt;
+&lt;blockquote cite=&quot;http://www.ecma-international.org/ecma-262/6.0/#sec-function-definitions-static-semantics-expectedargumentcount&quot;&gt;
+
+NOTE The ExpectedArgumentCount of a FormalParameterList is the number of FormalParameters to the left of either the rest parameter or the first FormalParameter with an Initializer. A FormalParameter without an initializer is allowed after the first parameter with an initializer but such parameters are considered to be optional with undefined as their default value.
+&lt;/blockquote&gt;
+
+&lt;p&gt;These scaled numbers should be taken in context. The ES5 equivalents are highly optimized, Firefox pushing over 833 million operations a second in one test, so the net performance of the transpiled versions may very well be sufficient for most use cases, particularly those not on the hot path.&lt;/p&gt;
+
+&lt;p&gt;The only native implementation, Firefox, performed identically to the ES5 implementation.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;2&quot;&gt;&lt;/td&gt;
+&lt;th colspan=&quot;2&quot;&gt;node&lt;/th&gt;
+&lt;th colspan=&quot;3&quot;&gt;chrome&lt;/th&gt;
+&lt;th colspan=&quot;3&quot;&gt;firefox&lt;/th&gt;
+&lt;th colspan=&quot;2&quot;&gt;internet explorer&lt;/th&gt;
+&lt;th colspan=&quot;1&quot;&gt;safari&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;2&quot;&gt;&lt;/td&gt;
+&lt;th&gt;0.10.39&lt;/th&gt;
+&lt;th&gt;2.3.0&lt;/th&gt;
+&lt;th&gt;43&lt;/th&gt;
+&lt;th&gt;44&lt;/th&gt;
+&lt;th&gt;45&lt;/th&gt;
+&lt;th&gt;38&lt;/th&gt;
+&lt;th&gt;39&lt;/th&gt;
+&lt;th&gt;40&lt;/th&gt;
+&lt;th&gt;11&lt;/th&gt;
+&lt;th&gt;12&lt;/th&gt;
+&lt;th&gt;8&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr id=&quot;user-content-test-classes&quot;&gt;
+&lt;th rowspan=&quot;4&quot;&gt;
+          classes&lt;br /&gt;
+          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/classes)
+        &lt;/th&gt;
+&lt;th&gt;babel&lt;/th&gt;
+&lt;td&gt;2.3x slower&lt;/td&gt;
+&lt;td&gt;1.5x slower&lt;/td&gt;
+&lt;td&gt;1.3x slower&lt;/td&gt;
+&lt;td&gt;1.4x slower&lt;/td&gt;
+&lt;td&gt;1.3x slower&lt;/td&gt;
+&lt;td&gt;27x slower&lt;/td&gt;
+&lt;td&gt;26x slower&lt;/td&gt;
+&lt;td&gt;30x slower&lt;/td&gt;
+&lt;td&gt;1.4x slower&lt;/td&gt;
+&lt;td&gt;1.5x slower&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;babel-loose&lt;/th&gt;
+&lt;td&gt;2.3x slower&lt;/td&gt;
+&lt;td&gt;1.5x slower&lt;/td&gt;
+&lt;td&gt;1.3x slower&lt;/td&gt;
+&lt;td&gt;1.4x slower&lt;/td&gt;
+&lt;td&gt;1.3x slower&lt;/td&gt;
+&lt;td&gt;6x slower&lt;/td&gt;
+&lt;td&gt;6x slower&lt;/td&gt;
+&lt;td&gt;8x slower&lt;/td&gt;
+&lt;td&gt;1.3x slower&lt;/td&gt;
+&lt;td&gt;2.4x slower&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;traceur&lt;/th&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;1.5x slower&lt;/td&gt;
+&lt;td&gt;1.7x slower&lt;/td&gt;
+&lt;td&gt;1.8x slower&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;es6&lt;/th&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr id=&quot;user-content-test-defaults&quot;&gt;
+&lt;th rowspan=&quot;3&quot;&gt;
+          defaults&lt;br /&gt;
+          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/defaults)
+        &lt;/th&gt;
+&lt;th&gt;babel&lt;/th&gt;
+&lt;td&gt;17x slower&lt;/td&gt;
+&lt;td&gt;11x slower&lt;/td&gt;
+&lt;td&gt;11x slower&lt;/td&gt;
+&lt;td&gt;9x slower&lt;/td&gt;
+&lt;td&gt;8x slower&lt;/td&gt;
+&lt;td&gt;1842x slower&lt;/td&gt;
+&lt;td&gt;2051x slower&lt;/td&gt;
+&lt;td&gt;2043x slower&lt;/td&gt;
+&lt;td&gt;229x slower&lt;/td&gt;
+&lt;td&gt;72x slower&lt;/td&gt;
+&lt;td&gt;4x slower&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;traceur&lt;/th&gt;
+&lt;td&gt;16x slower&lt;/td&gt;
+&lt;td&gt;12x slower&lt;/td&gt;
+&lt;td&gt;12x slower&lt;/td&gt;
+&lt;td&gt;10x slower&lt;/td&gt;
+&lt;td&gt;9x slower&lt;/td&gt;
+&lt;td&gt;1759x slower&lt;/td&gt;
+&lt;td&gt;2305x slower&lt;/td&gt;
+&lt;td&gt;1974x slower&lt;/td&gt;
+&lt;td&gt;210x slower&lt;/td&gt;
+&lt;td&gt;73x slower&lt;/td&gt;
+&lt;td&gt;4x slower&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;es6&lt;/th&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3&gt;
+&lt;a id=&quot;user-content-rest-parameters&quot; class=&quot;anchor&quot; href=&quot;#rest-parameters&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;octicon octicon-link&quot;&gt;&lt;/span&gt;&lt;/a&gt;Rest Parameters&lt;/h3&gt;
+
+&lt;p&gt;Rest parameters are as fast or faster than the ES5 equivalent under almost all implementations. Native implementations provided a performance boost up to 40x (with the exception of V8 where it causes a &lt;a href=&quot;https://code.google.com/p/v8/issues/detail?id=2159#c18&quot;&gt;known deoptimization&lt;/a&gt;). Use them with a transpiler. They’re great. Death to &lt;code class=&quot;highlighter-rouge&quot;&gt;arguments&lt;/code&gt;.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;2&quot;&gt;&lt;/td&gt;
+&lt;th colspan=&quot;2&quot;&gt;node&lt;/th&gt;
+&lt;th colspan=&quot;3&quot;&gt;chrome&lt;/th&gt;
+&lt;th colspan=&quot;3&quot;&gt;firefox&lt;/th&gt;
+&lt;th colspan=&quot;2&quot;&gt;internet explorer&lt;/th&gt;
+&lt;th colspan=&quot;1&quot;&gt;safari&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;2&quot;&gt;&lt;/td&gt;
+&lt;th&gt;0.10.39&lt;/th&gt;
+&lt;th&gt;2.3.0&lt;/th&gt;
+&lt;th&gt;43&lt;/th&gt;
+&lt;th&gt;44&lt;/th&gt;
+&lt;th&gt;45&lt;/th&gt;
+&lt;th&gt;38&lt;/th&gt;
+&lt;th&gt;39&lt;/th&gt;
+&lt;th&gt;40&lt;/th&gt;
+&lt;th&gt;11&lt;/th&gt;
+&lt;th&gt;12&lt;/th&gt;
+&lt;th&gt;8&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr id=&quot;user-content-test-rest&quot;&gt;
+&lt;th rowspan=&quot;3&quot;&gt;
+          rest&lt;br /&gt;
+          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/rest)
+        &lt;/th&gt;
+&lt;th&gt;babel&lt;/th&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;2.0x slower&lt;/td&gt;
+&lt;td&gt;1.5x slower&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;traceur&lt;/th&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;1.5x faster&lt;/td&gt;
+&lt;td&gt;1.2x faster&lt;/td&gt;
+&lt;td&gt;1.2x faster&lt;/td&gt;
+&lt;td&gt;1.2x faster&lt;/td&gt;
+&lt;td&gt;31x faster&lt;/td&gt;
+&lt;td&gt;34x faster&lt;/td&gt;
+&lt;td&gt;27x faster&lt;/td&gt;
+&lt;td&gt;2.4x slower&lt;/td&gt;
+&lt;td&gt;1.6x slower&lt;/td&gt;
+&lt;td&gt;1.3x faster&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;es6&lt;/th&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;3x slower&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;40x faster&lt;/td&gt;
+&lt;td&gt;42x faster&lt;/td&gt;
+&lt;td&gt;32x faster&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;8x faster&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3&gt;
+&lt;a id=&quot;user-content-spread-parameters&quot; class=&quot;anchor&quot; href=&quot;#spread-parameters&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;octicon octicon-link&quot;&gt;&lt;/span&gt;&lt;/a&gt;Spread Parameters&lt;/h3&gt;
+
+&lt;p&gt;Under Babel, spread parameters for arrays perform identically to the ES5 counterpart as they are effectively both an &lt;code class=&quot;highlighter-rouge&quot;&gt;apply&lt;/code&gt; call. Under Traceur and all of the native implementations the implementations are 1.3x to 17x slower.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;2&quot;&gt;&lt;/td&gt;
+&lt;th colspan=&quot;2&quot;&gt;node&lt;/th&gt;
+&lt;th colspan=&quot;3&quot;&gt;chrome&lt;/th&gt;
+&lt;th colspan=&quot;3&quot;&gt;firefox&lt;/th&gt;
+&lt;th colspan=&quot;2&quot;&gt;internet explorer&lt;/th&gt;
+&lt;th colspan=&quot;1&quot;&gt;safari&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;2&quot;&gt;&lt;/td&gt;
+&lt;th&gt;0.10.39&lt;/th&gt;
+&lt;th&gt;2.3.0&lt;/th&gt;
+&lt;th&gt;43&lt;/th&gt;
+&lt;th&gt;44&lt;/th&gt;
+&lt;th&gt;45&lt;/th&gt;
+&lt;th&gt;38&lt;/th&gt;
+&lt;th&gt;39&lt;/th&gt;
+&lt;th&gt;40&lt;/th&gt;
+&lt;th&gt;11&lt;/th&gt;
+&lt;th&gt;12&lt;/th&gt;
+&lt;th&gt;8&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr id=&quot;user-content-test-spread&quot;&gt;
+&lt;th rowspan=&quot;3&quot;&gt;
+          spread&lt;br /&gt;
+          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/spread)
+        &lt;/th&gt;
+&lt;th&gt;babel&lt;/th&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;traceur&lt;/th&gt;
+&lt;td&gt;13x slower&lt;/td&gt;
+&lt;td&gt;6x slower&lt;/td&gt;
+&lt;td&gt;5x slower&lt;/td&gt;
+&lt;td&gt;6x slower&lt;/td&gt;
+&lt;td&gt;6x slower&lt;/td&gt;
+&lt;td&gt;2.7x slower&lt;/td&gt;
+&lt;td&gt;3x slower&lt;/td&gt;
+&lt;td&gt;3x slower&lt;/td&gt;
+&lt;td&gt;9x slower&lt;/td&gt;
+&lt;td&gt;712x slower&lt;/td&gt;
+&lt;td&gt;17x slower&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;es6&lt;/th&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;3x slower&lt;/td&gt;
+&lt;td&gt;4x slower&lt;/td&gt;
+&lt;td&gt;4x slower&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;1.3x slower&lt;/td&gt;
+&lt;td&gt;2.5x slower&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr id=&quot;user-content-test-spread-generator&quot;&gt;
+&lt;th rowspan=&quot;4&quot;&gt;
+          spread-generator&lt;br /&gt;
+          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/spread-generator)
+        &lt;/th&gt;
+&lt;th&gt;babel&lt;/th&gt;
+&lt;td&gt;150x slower&lt;/td&gt;
+&lt;td&gt;55x slower&lt;/td&gt;
+&lt;td&gt;58x slower&lt;/td&gt;
+&lt;td&gt;66x slower&lt;/td&gt;
+&lt;td&gt;71x slower&lt;/td&gt;
+&lt;td&gt;153x slower&lt;/td&gt;
+&lt;td&gt;143x slower&lt;/td&gt;
+&lt;td&gt;157x slower&lt;/td&gt;
+&lt;td&gt;656x slower&lt;/td&gt;
+&lt;td&gt;423x slower&lt;/td&gt;
+&lt;td&gt;64x slower&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;babel-loose&lt;/th&gt;
+&lt;td&gt;114x slower&lt;/td&gt;
+&lt;td&gt;46x slower&lt;/td&gt;
+&lt;td&gt;41x slower&lt;/td&gt;
+&lt;td&gt;45x slower&lt;/td&gt;
+&lt;td&gt;53x slower&lt;/td&gt;
+&lt;td&gt;60x slower&lt;/td&gt;
+&lt;td&gt;60x slower&lt;/td&gt;
+&lt;td&gt;61x slower&lt;/td&gt;
+&lt;td&gt;28x slower&lt;/td&gt;
+&lt;td&gt;51x slower&lt;/td&gt;
+&lt;td&gt;22x slower&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;traceur&lt;/th&gt;
+&lt;td&gt;27x slower&lt;/td&gt;
+&lt;td&gt;10x slower&lt;/td&gt;
+&lt;td&gt;9x slower&lt;/td&gt;
+&lt;td&gt;10x slower&lt;/td&gt;
+&lt;td&gt;13x slower&lt;/td&gt;
+&lt;td&gt;11x slower&lt;/td&gt;
+&lt;td&gt;10x slower&lt;/td&gt;
+&lt;td&gt;11x slower&lt;/td&gt;
+&lt;td&gt;15x slower&lt;/td&gt;
+&lt;td&gt;1551x slower&lt;/td&gt;
+&lt;td&gt;9x slower&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;es6&lt;/th&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;7x slower&lt;/td&gt;
+&lt;td&gt;8x slower&lt;/td&gt;
+&lt;td&gt;7x slower&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr id=&quot;user-content-test-spread-literal&quot;&gt;
+&lt;th rowspan=&quot;3&quot;&gt;
+          spread-literal&lt;br /&gt;
+          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/spread-literal)
+        &lt;/th&gt;
+&lt;th&gt;babel&lt;/th&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;1.2x slower&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;1.2x slower&lt;/td&gt;
+&lt;td&gt;3x slower&lt;/td&gt;
+&lt;td&gt;1.7x slower&lt;/td&gt;
+&lt;td&gt;2.0x slower&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;traceur&lt;/th&gt;
+&lt;td&gt;6x slower&lt;/td&gt;
+&lt;td&gt;3.0x slower&lt;/td&gt;
+&lt;td&gt;2.1x slower&lt;/td&gt;
+&lt;td&gt;2.5x slower&lt;/td&gt;
+&lt;td&gt;2.3x slower&lt;/td&gt;
+&lt;td&gt;6x slower&lt;/td&gt;
+&lt;td&gt;5x slower&lt;/td&gt;
+&lt;td&gt;5x slower&lt;/td&gt;
+&lt;td&gt;26x slower&lt;/td&gt;
+&lt;td&gt;451x slower&lt;/td&gt;
+&lt;td&gt;9x slower&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;es6&lt;/th&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;8x slower&lt;/td&gt;
+&lt;td&gt;7x slower&lt;/td&gt;
+&lt;td&gt;8x slower&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;1.8x slower&lt;/td&gt;
+&lt;td&gt;3x slower&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3&gt;
+&lt;a id=&quot;user-content-let--const&quot; class=&quot;anchor&quot; href=&quot;#let--const&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;octicon octicon-link&quot;&gt;&lt;/span&gt;&lt;/a&gt;Let + Const&lt;/h3&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;let&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;const&lt;/code&gt; bindings were pretty much identical across the board. While these don’t offer performance improvements (yet), they shouldn’t negatively impact performance.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;2&quot;&gt;&lt;/td&gt;
+&lt;th colspan=&quot;2&quot;&gt;node&lt;/th&gt;
+&lt;th colspan=&quot;3&quot;&gt;chrome&lt;/th&gt;
+&lt;th colspan=&quot;3&quot;&gt;firefox&lt;/th&gt;
+&lt;th colspan=&quot;2&quot;&gt;internet explorer&lt;/th&gt;
+&lt;th colspan=&quot;1&quot;&gt;safari&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;2&quot;&gt;&lt;/td&gt;
+&lt;th&gt;0.10.39&lt;/th&gt;
+&lt;th&gt;2.3.0&lt;/th&gt;
+&lt;th&gt;43&lt;/th&gt;
+&lt;th&gt;44&lt;/th&gt;
+&lt;th&gt;45&lt;/th&gt;
+&lt;th&gt;38&lt;/th&gt;
+&lt;th&gt;39&lt;/th&gt;
+&lt;th&gt;40&lt;/th&gt;
+&lt;th&gt;11&lt;/th&gt;
+&lt;th&gt;12&lt;/th&gt;
+&lt;th&gt;8&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr id=&quot;user-content-test-bindings&quot;&gt;
+&lt;th rowspan=&quot;3&quot;&gt;
+          bindings&lt;br /&gt;
+          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/bindings)
+        &lt;/th&gt;
+&lt;th&gt;babel&lt;/th&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;traceur&lt;/th&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;1.3x faster&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;es6&lt;/th&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;2.3x slower&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;1.3x slower&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3&gt;
+&lt;a id=&quot;user-content-forof&quot; class=&quot;anchor&quot; href=&quot;#forof&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;octicon octicon-link&quot;&gt;&lt;/span&gt;&lt;/a&gt;For..of&lt;/h3&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;for..of&lt;/code&gt; is universally slower, ranging from 3 to 20x slower for array iteration over classical array iteration. When iterating over an object with a custom iterator, the performance is also much slower than &lt;code class=&quot;highlighter-rouge&quot;&gt;for..in&lt;/code&gt; iteration with &lt;code class=&quot;highlighter-rouge&quot;&gt;hasOwnProperty&lt;/code&gt; checks.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;2&quot;&gt;&lt;/td&gt;
+&lt;th colspan=&quot;2&quot;&gt;node&lt;/th&gt;
+&lt;th colspan=&quot;3&quot;&gt;chrome&lt;/th&gt;
+&lt;th colspan=&quot;3&quot;&gt;firefox&lt;/th&gt;
+&lt;th colspan=&quot;2&quot;&gt;internet explorer&lt;/th&gt;
+&lt;th colspan=&quot;1&quot;&gt;safari&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;2&quot;&gt;&lt;/td&gt;
+&lt;th&gt;0.10.39&lt;/th&gt;
+&lt;th&gt;2.3.0&lt;/th&gt;
+&lt;th&gt;43&lt;/th&gt;
+&lt;th&gt;44&lt;/th&gt;
+&lt;th&gt;45&lt;/th&gt;
+&lt;th&gt;38&lt;/th&gt;
+&lt;th&gt;39&lt;/th&gt;
+&lt;th&gt;40&lt;/th&gt;
+&lt;th&gt;11&lt;/th&gt;
+&lt;th&gt;12&lt;/th&gt;
+&lt;th&gt;8&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr id=&quot;user-content-test-for-of-array&quot;&gt;
+&lt;th rowspan=&quot;4&quot;&gt;
+          for-of-array&lt;br /&gt;
+          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/for-of-array)
+        &lt;/th&gt;
+&lt;th&gt;babel&lt;/th&gt;
+&lt;td&gt;21x slower&lt;/td&gt;
+&lt;td&gt;8x slower&lt;/td&gt;
+&lt;td&gt;8x slower&lt;/td&gt;
+&lt;td&gt;9x slower&lt;/td&gt;
+&lt;td&gt;9x slower&lt;/td&gt;
+&lt;td&gt;14x slower&lt;/td&gt;
+&lt;td&gt;20x slower&lt;/td&gt;
+&lt;td&gt;19x slower&lt;/td&gt;
+&lt;td&gt;15x slower&lt;/td&gt;
+&lt;td&gt;489x slower&lt;/td&gt;
+&lt;td&gt;7x slower&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;babel-loose&lt;/th&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;1.4x slower&lt;/td&gt;
+&lt;td&gt;1.7x slower&lt;/td&gt;
+&lt;td&gt;1.7x slower&lt;/td&gt;
+&lt;td&gt;1.3x slower&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;1.8x slower&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;traceur&lt;/th&gt;
+&lt;td&gt;12x slower&lt;/td&gt;
+&lt;td&gt;7x slower&lt;/td&gt;
+&lt;td&gt;7x slower&lt;/td&gt;
+&lt;td&gt;8x slower&lt;/td&gt;
+&lt;td&gt;8x slower&lt;/td&gt;
+&lt;td&gt;26x slower&lt;/td&gt;
+&lt;td&gt;31x slower&lt;/td&gt;
+&lt;td&gt;32x slower&lt;/td&gt;
+&lt;td&gt;9x slower&lt;/td&gt;
+&lt;td&gt;6x slower&lt;/td&gt;
+&lt;td&gt;6x slower&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;es6&lt;/th&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;6x slower&lt;/td&gt;
+&lt;td&gt;6x slower&lt;/td&gt;
+&lt;td&gt;8x slower&lt;/td&gt;
+&lt;td&gt;8x slower&lt;/td&gt;
+&lt;td&gt;5x slower&lt;/td&gt;
+&lt;td&gt;7x slower&lt;/td&gt;
+&lt;td&gt;7x slower&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;2.9x slower&lt;/td&gt;
+&lt;td&gt;4x slower&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr id=&quot;user-content-test-for-of-object&quot;&gt;
+&lt;th rowspan=&quot;4&quot;&gt;
+          for-of-object&lt;br /&gt;
+          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/for-of-object)
+        &lt;/th&gt;
+&lt;th&gt;babel&lt;/th&gt;
+&lt;td&gt;10x slower&lt;/td&gt;
+&lt;td&gt;7x slower&lt;/td&gt;
+&lt;td&gt;8x slower&lt;/td&gt;
+&lt;td&gt;9x slower&lt;/td&gt;
+&lt;td&gt;6x slower&lt;/td&gt;
+&lt;td&gt;6x slower&lt;/td&gt;
+&lt;td&gt;6x slower&lt;/td&gt;
+&lt;td&gt;5x slower&lt;/td&gt;
+&lt;td&gt;60x slower&lt;/td&gt;
+&lt;td&gt;11x slower&lt;/td&gt;
+&lt;td&gt;6x slower&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;babel-loose&lt;/th&gt;
+&lt;td&gt;10x slower&lt;/td&gt;
+&lt;td&gt;6x slower&lt;/td&gt;
+&lt;td&gt;7x slower&lt;/td&gt;
+&lt;td&gt;9x slower&lt;/td&gt;
+&lt;td&gt;7x slower&lt;/td&gt;
+&lt;td&gt;4x slower&lt;/td&gt;
+&lt;td&gt;4x slower&lt;/td&gt;
+&lt;td&gt;4x slower&lt;/td&gt;
+&lt;td&gt;6x slower&lt;/td&gt;
+&lt;td&gt;449x slower&lt;/td&gt;
+&lt;td&gt;6x slower&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;traceur&lt;/th&gt;
+&lt;td&gt;8x slower&lt;/td&gt;
+&lt;td&gt;7x slower&lt;/td&gt;
+&lt;td&gt;8x slower&lt;/td&gt;
+&lt;td&gt;9x slower&lt;/td&gt;
+&lt;td&gt;7x slower&lt;/td&gt;
+&lt;td&gt;9x slower&lt;/td&gt;
+&lt;td&gt;10x slower&lt;/td&gt;
+&lt;td&gt;9x slower&lt;/td&gt;
+&lt;td&gt;5x slower&lt;/td&gt;
+&lt;td&gt;4x slower&lt;/td&gt;
+&lt;td&gt;4x slower&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;es6&lt;/th&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;6x slower&lt;/td&gt;
+&lt;td&gt;7x slower&lt;/td&gt;
+&lt;td&gt;8x slower&lt;/td&gt;
+&lt;td&gt;6x slower&lt;/td&gt;
+&lt;td&gt;3x slower&lt;/td&gt;
+&lt;td&gt;3x slower&lt;/td&gt;
+&lt;td&gt;3x slower&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;3x slower&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3&gt;
+&lt;a id=&quot;user-content-generators&quot; class=&quot;anchor&quot; href=&quot;#generators&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;octicon octicon-link&quot;&gt;&lt;/span&gt;&lt;/a&gt;Generators&lt;/h3&gt;
+
+&lt;p&gt;Much like &lt;code class=&quot;highlighter-rouge&quot;&gt;for..of&lt;/code&gt;, generators are also quite a bit slower than a raw ES5 implementation of the iterable protocol, with performance ranging from 10x to 750x slower. There is hope here as the V8 implementation achieves parity with the ES5 implementation.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;2&quot;&gt;&lt;/td&gt;
+&lt;th colspan=&quot;2&quot;&gt;node&lt;/th&gt;
+&lt;th colspan=&quot;3&quot;&gt;chrome&lt;/th&gt;
+&lt;th colspan=&quot;3&quot;&gt;firefox&lt;/th&gt;
+&lt;th colspan=&quot;2&quot;&gt;internet explorer&lt;/th&gt;
+&lt;th colspan=&quot;1&quot;&gt;safari&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;2&quot;&gt;&lt;/td&gt;
+&lt;th&gt;0.10.39&lt;/th&gt;
+&lt;th&gt;2.3.0&lt;/th&gt;
+&lt;th&gt;43&lt;/th&gt;
+&lt;th&gt;44&lt;/th&gt;
+&lt;th&gt;45&lt;/th&gt;
+&lt;th&gt;38&lt;/th&gt;
+&lt;th&gt;39&lt;/th&gt;
+&lt;th&gt;40&lt;/th&gt;
+&lt;th&gt;11&lt;/th&gt;
+&lt;th&gt;12&lt;/th&gt;
+&lt;th&gt;8&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr id=&quot;user-content-test-generator&quot;&gt;
+&lt;th rowspan=&quot;3&quot;&gt;
+          generator&lt;br /&gt;
+          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/generator)
+        &lt;/th&gt;
+&lt;th&gt;babel&lt;/th&gt;
+&lt;td&gt;601x slower&lt;/td&gt;
+&lt;td&gt;65x slower&lt;/td&gt;
+&lt;td&gt;67x slower&lt;/td&gt;
+&lt;td&gt;63x slower&lt;/td&gt;
+&lt;td&gt;69x slower&lt;/td&gt;
+&lt;td&gt;754x slower&lt;/td&gt;
+&lt;td&gt;723x slower&lt;/td&gt;
+&lt;td&gt;716x slower&lt;/td&gt;
+&lt;td&gt;79x slower&lt;/td&gt;
+&lt;td&gt;499x slower&lt;/td&gt;
+&lt;td&gt;78x slower&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;traceur&lt;/th&gt;
+&lt;td&gt;77x slower&lt;/td&gt;
+&lt;td&gt;10x slower&lt;/td&gt;
+&lt;td&gt;10x slower&lt;/td&gt;
+&lt;td&gt;10x slower&lt;/td&gt;
+&lt;td&gt;12x slower&lt;/td&gt;
+&lt;td&gt;48x slower&lt;/td&gt;
+&lt;td&gt;50x slower&lt;/td&gt;
+&lt;td&gt;46x slower&lt;/td&gt;
+&lt;td&gt;18x slower&lt;/td&gt;
+&lt;td&gt;112x slower&lt;/td&gt;
+&lt;td&gt;10x slower&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;es6&lt;/th&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;1.2x slower&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;22x slower&lt;/td&gt;
+&lt;td&gt;20x slower&lt;/td&gt;
+&lt;td&gt;19x slower&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;Issues:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;[Regenerator Init Optimization](https://github.com/facebook/regenerator/pull/207)&lt;/li&gt;
+&lt;li&gt;[Regenerator Exec Optimization](https://github.com/facebook/regenerator/pull/208)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;maps-and-sets&quot;&gt;Maps and Sets&lt;/h3&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Map&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;Set&lt;/code&gt; all have insert performance that is about 10x slower for a moderately sized data set. All of the implementations show massive improvement on the lookup operations, with Firefox’s native implementation showing a 200x speed increase for a dataset of size 500.&lt;/p&gt;
+
+&lt;p&gt;Traceur appears to delegate to the native implementation via their polyfill where possible so performance is closely linked to improvements in the native layer. In runtime mode, Babel does not appear to delegate and performance suffers as a result. Babel’s polyfill mode should behave as Traceur does but this was not directly tested.&lt;/p&gt;
+
+&lt;p&gt;Take caution with these numbers. The tests use a data set of size 500 and other data sets will have varying performance but it appears that these features are ready for general use if you have many reads and few writes or need to have objects as keys.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;2&quot;&gt;&lt;/td&gt;
+&lt;th colspan=&quot;2&quot;&gt;node&lt;/th&gt;
+&lt;th colspan=&quot;3&quot;&gt;chrome&lt;/th&gt;
+&lt;th colspan=&quot;3&quot;&gt;firefox&lt;/th&gt;
+&lt;th colspan=&quot;2&quot;&gt;internet explorer&lt;/th&gt;
+&lt;th colspan=&quot;1&quot;&gt;safari&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;2&quot;&gt;&lt;/td&gt;
+&lt;th&gt;0.10.39&lt;/th&gt;
+&lt;th&gt;2.3.0&lt;/th&gt;
+&lt;th&gt;43&lt;/th&gt;
+&lt;th&gt;44&lt;/th&gt;
+&lt;th&gt;45&lt;/th&gt;
+&lt;th&gt;38&lt;/th&gt;
+&lt;th&gt;39&lt;/th&gt;
+&lt;th&gt;40&lt;/th&gt;
+&lt;th&gt;11&lt;/th&gt;
+&lt;th&gt;12&lt;/th&gt;
+&lt;th&gt;8&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr id=&quot;user-content-test-map-set&quot;&gt;
+&lt;th rowspan=&quot;3&quot;&gt;
+          map-set&lt;br /&gt;
+          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/map-set)
+        &lt;/th&gt;
+&lt;th&gt;babel&lt;/th&gt;
+&lt;td&gt;13x slower&lt;/td&gt;
+&lt;td&gt;3.0x slower&lt;/td&gt;
+&lt;td&gt;5x slower&lt;/td&gt;
+&lt;td&gt;5x slower&lt;/td&gt;
+&lt;td&gt;3.0x slower&lt;/td&gt;
+&lt;td&gt;105x slower&lt;/td&gt;
+&lt;td&gt;12x slower&lt;/td&gt;
+&lt;td&gt;15x slower&lt;/td&gt;
+&lt;td&gt;60x slower&lt;/td&gt;
+&lt;td&gt;19x slower&lt;/td&gt;
+&lt;td&gt;79x slower&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;traceur&lt;/th&gt;
+&lt;td&gt;5x slower&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;2.2x slower&lt;/td&gt;
+&lt;td&gt;2.3x slower&lt;/td&gt;
+&lt;td&gt;1.6x slower&lt;/td&gt;
+&lt;td&gt;20x slower&lt;/td&gt;
+&lt;td&gt;2.5x slower&lt;/td&gt;
+&lt;td&gt;2.4x slower&lt;/td&gt;
+&lt;td&gt;28x slower&lt;/td&gt;
+&lt;td&gt;2.2x slower&lt;/td&gt;
+&lt;td&gt;16x slower&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;es6&lt;/th&gt;
+&lt;td&gt;5x slower&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;2.2x slower&lt;/td&gt;
+&lt;td&gt;2.3x slower&lt;/td&gt;
+&lt;td&gt;1.6x slower&lt;/td&gt;
+&lt;td&gt;21x slower&lt;/td&gt;
+&lt;td&gt;2.2x slower&lt;/td&gt;
+&lt;td&gt;2.7x slower&lt;/td&gt;
+&lt;td&gt;28x slower&lt;/td&gt;
+&lt;td&gt;2.2x slower&lt;/td&gt;
+&lt;td&gt;15x slower&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3&gt;
+&lt;a id=&quot;user-content-promises&quot; class=&quot;anchor&quot; href=&quot;#promises&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;octicon octicon-link&quot;&gt;&lt;/span&gt;&lt;/a&gt;Promises&lt;/h3&gt;
+
+&lt;p&gt;Promises are across the board faster with both the polyfill and native implementations. This particular benchmark is dubious as it’s both async and inheriently tied to long running behaviors where execution overhead has little impact.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;2&quot;&gt;&lt;/td&gt;
+&lt;th colspan=&quot;2&quot;&gt;node&lt;/th&gt;
+&lt;th colspan=&quot;3&quot;&gt;chrome&lt;/th&gt;
+&lt;th colspan=&quot;3&quot;&gt;firefox&lt;/th&gt;
+&lt;th colspan=&quot;2&quot;&gt;internet explorer&lt;/th&gt;
+&lt;th colspan=&quot;1&quot;&gt;safari&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;2&quot;&gt;&lt;/td&gt;
+&lt;th&gt;0.10.39&lt;/th&gt;
+&lt;th&gt;2.3.0&lt;/th&gt;
+&lt;th&gt;43&lt;/th&gt;
+&lt;th&gt;44&lt;/th&gt;
+&lt;th&gt;45&lt;/th&gt;
+&lt;th&gt;38&lt;/th&gt;
+&lt;th&gt;39&lt;/th&gt;
+&lt;th&gt;40&lt;/th&gt;
+&lt;th&gt;11&lt;/th&gt;
+&lt;th&gt;12&lt;/th&gt;
+&lt;th&gt;8&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr id=&quot;user-content-test-promises&quot;&gt;
+&lt;th rowspan=&quot;3&quot;&gt;
+          promises&lt;br /&gt;
+          [tests](https://github.com/kpdecker/six-speed/tree/master/tests/promises)
+        &lt;/th&gt;
+&lt;th&gt;babel&lt;/th&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;6x faster&lt;/td&gt;
+&lt;td&gt;7x faster&lt;/td&gt;
+&lt;td&gt;7x faster&lt;/td&gt;
+&lt;td&gt;21x faster&lt;/td&gt;
+&lt;td&gt;17x faster&lt;/td&gt;
+&lt;td&gt;16x faster&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;1.2x slower&lt;/td&gt;
+&lt;td&gt;3x faster&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;traceur&lt;/th&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;2.0x faster&lt;/td&gt;
+&lt;td&gt;2.0x faster&lt;/td&gt;
+&lt;td&gt;1.9x faster&lt;/td&gt;
+&lt;td&gt;36x faster&lt;/td&gt;
+&lt;td&gt;31x faster&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;1.8x slower&lt;/td&gt;
+&lt;td&gt;3x faster&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th&gt;es6&lt;/th&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;2.0x faster&lt;/td&gt;
+&lt;td&gt;2.0x faster&lt;/td&gt;
+&lt;td&gt;1.9x faster&lt;/td&gt;
+&lt;td&gt;37x faster&lt;/td&gt;
+&lt;td&gt;29x faster&lt;/td&gt;
+&lt;td&gt;Identical&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;1.9x slower&lt;/td&gt;
+&lt;td&gt;3x faster&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h2 id=&quot;testing-methodology&quot;&gt;Testing methodology&lt;/h2&gt;
+
+&lt;p&gt;For each of the ES6 features in question, a ES5 implementation of that functionality was written along with a ES6 version. It should be noted that the functionality is frequently the same, but in some cases the “common” vs. “correct” version was written, i.e. using &lt;code class=&quot;highlighter-rouge&quot;&gt;x[key] = value&lt;/code&gt; vs. &lt;code class=&quot;highlighter-rouge&quot;&gt;defineProperty&lt;/code&gt; which is faster but can be hit but a particular nasty edge case for those who deem it fun to extend &lt;code class=&quot;highlighter-rouge&quot;&gt;Object.prototype&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Babel, in both loose+runtime and runtime mode, and Traceur were then used to compile the ES6 version to a ES5 compliant version, utilizing the runtime over polyfill to maintain test isolation and avoid native implementations where possible.&lt;/p&gt;
+
+&lt;p&gt;All of these test instances were then benchmarked in the given JavaScript engine using &lt;a href=&quot;http://benchmarkjs.com/&quot;&gt;Benchmark.js&lt;/a&gt; and then the operations per second compared to the ES5 implementation. Cross browser and cross execution comparisions are avoided as much as possible to isolate environmental issues when executing on VMs in the cloud.&lt;/p&gt;
+
+&lt;p&gt;All of this data, including any updates from more recent test runs is available at &lt;a href=&quot;http://kpdecker.github.io/six-speed/&quot;&gt;http://kpdecker.github.io/six-speed/&lt;/a&gt; and the test suite is available at &lt;a href=&quot;https://github.com/kpdecker/six-speed&quot;&gt;https://github.com/kpdecker/six-speed&lt;/a&gt; for review/feedback.&lt;/p&gt;
+
+&lt;h1 id=&quot;takeaways&quot;&gt;Takeaways&lt;/h1&gt;
+
+&lt;p&gt;As noted above, these results might not be representative of your own application since they only test very small subsets of inputs and behaviors of these new features. If you are finding that you have performance issues with your code using these features, you should test them within your own environment to see what the actual behavior is.&lt;/p&gt;
+
+&lt;p&gt;While some of these features are a bit slow as of this writing, their performance should only improve as the native implementations mature and are optimized as real world use is applied to them. For the transpilers, there are some performance optimzations that can be made but much of the overhead they are experiencing is due to spec compliance, which they go to great lengths to achieve, but this comes with unfortunate overhead under ES5 implementations as they stand. Babel’s loose mode does offer a bit of a performance boost, but care must be taken when using loose mode as this could cause breakages when code is migrated to the standard native implementations.&lt;/p&gt;
+
+&lt;p&gt;Personally I intend to start using most of these features where they make sense but will avoid designing core APIs around these features (perhaps with the exception of Promises) until the native implementations have matured a bit.&lt;/p&gt;</content><author><name>Kevin Decker</name></author><category term="ES6" /><category term="Performance" /><category term="Web Development" /><summary type="html">With ES6 features landing quickly in native browsers and readily available for use through Babel and Traceur, it seemed like it was time to look not just at support, but also the performance impact of using these features under the current implementations. While there is great promise for the future, the picture of ES6 feature performance today is very muddled and depends on the specific feature being used. Some such as bindings and simple arrow/destructuring are ready for use today, others such as generators and tagged template strings might require analysis before using.</summary></entry><entry><title type="html">May Conference Recap</title><link href="http://localhost:4000/2013/06/may-conference-recap/" rel="alternate" type="text/html" title="May Conference Recap" /><published>2013-06-03T00:00:00-05:00</published><updated>2013-06-03T00:00:00-05:00</updated><id>http://localhost:4000/2013/06/may-conference-recap</id><content type="html" xml:base="http://localhost:4000/2013/06/may-conference-recap/">&lt;p&gt;I had the pleasure of attending portions of Google IO, CSS Conf, and JS Conf and wanted to summarize my notes on these conferences. These are my own take aways and may not have been what the presenter intended. If I’m completely off base, please feel free to drop me a line. This is also not inclusive as there are only so many sessions that one can attend :)&lt;/p&gt;
+
+&lt;h2 id=&quot;major-trends&quot;&gt;Major Trends&lt;/h2&gt;
+
+&lt;h3 id=&quot;componentization&quot;&gt;Componentization&lt;/h3&gt;
+
+&lt;p&gt;Biggest theme of all of these conferences was attempting to create ways of compoentizing our code so that we can leave the smell of the poo all in one place, to paraphrase @danwrong.&lt;/p&gt;
+
+&lt;h4 id=&quot;polymer&quot;&gt;Polymer&lt;/h4&gt;
+&lt;p&gt;Google has the &lt;a href=&quot;http://www.polymer-project.org/&quot;&gt;Polymer&lt;/a&gt; framework which polyfils web components. The premise is that you can create truly isolated components that are drop in and do not have worries such as CSS impact from other components.&lt;/p&gt;
+
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;element&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;my-element&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;section&amp;gt;&lt;/span&gt;
+    I'm a my-element!
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/section&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;footer&amp;gt;&lt;/span&gt;nothing to see here&lt;span class=&quot;nt&quot;&gt;&amp;lt;/footer&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;script&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// When &amp;lt;element&amp;gt; is in document, might run in wrong context.&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// Only do work when this == &amp;lt;element&amp;gt;.&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!==&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;window&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;section&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;querySelector&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'section'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;register&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;prototype&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;readyCallback&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;innerHTML&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;section&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;innerHTML&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+          &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+     &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/element&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;This looks pretty amazing and I think will provide some awesome separation of concerns between content and behaviors in the future. Polyfilling this behavior seems outright genius but at the same time scares me as you are basing a lot of your implementation on something that is being hacked into the browser.&lt;/p&gt;
+
+&lt;p&gt;I’m of the opinion that this is amazing future looking work but is a bit more risk than I’d like to take on for my user base.&lt;/p&gt;
+
+&lt;p&gt;With standards support for this moving forward I think this is where we will be in 5-10 years depending on the user base that a project is required to support. I also believe that there is a huge opportunity here for developer tooling as this changes some things up that will require changes and improvements to our existing hint/test/minimize/etc tool stacks.&lt;/p&gt;
+
+&lt;h4 id=&quot;react&quot;&gt;React&lt;/h4&gt;
+&lt;p&gt;Facebook is doing similar work with their &lt;a href=&quot;http://facebook.github.io/react/&quot;&gt;React&lt;/a&gt; framework. They have created a new compiled to JavaScript language that allows one to embed html into the source file:&lt;/p&gt;
+
+&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;HelloMessage&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;React&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;createClass&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;render&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;div&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Hello '&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;props&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/div&amp;gt;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;;
+&lt;/span&gt;  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The framework will then manage the all of the rendering lifecycle without data binding or blanket re-rendering. This is apparently done by a DOM diffing algorithm that walks the DOM tree and updates only the components that need to be on a property change. The presenting team highlighted that you can provide hints to this implementation to improve performance so I do question how well this scales.&lt;/p&gt;
+
+&lt;p&gt;I have not had a chance to play around with this implementation but I am not against the html embedded in a JavaScript file like many people in the blogosphere are/have been. I think both this and polymer tackle separation of concerns in a different manner than the HTML/CSS/JS paradigm that has been beat into web developers for so long. I see them as implementing separation of concerns at a content vs. behavior level which may be better for some workflows.&lt;/p&gt;
+
+&lt;h4 id=&quot;flight&quot;&gt;Flight&lt;/h4&gt;
+&lt;p&gt;&lt;a href=&quot;http://twitter.github.io/flight/&quot;&gt;Flight&lt;/a&gt; from Twitter attempts to handle componetization at a much smaller level. They focus on defining interfaces between discrete components. Each of these components can focus on only their implementation.&lt;/p&gt;
+
+&lt;p&gt;This is lower-level than the systems above and in many ways can be used to build other framework
+ systems.&lt;/p&gt;
+
+&lt;h3 id=&quot;performance&quot;&gt;Performance&lt;/h3&gt;
+&lt;p&gt;Performance was a huge concern at all 3 conferences with many sessions devoted to different aspects of performance improvements. My major take aways are:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Don’t follow a coding pattern because something is “faster”.&lt;/p&gt;
+
+    &lt;p&gt;What exactly is faster will change as runtimes optimize for the code that they are seeing. Instead look at what the tools are saying and react accordingly.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Don’t prematurely optimize.&lt;/p&gt;
+
+    &lt;p&gt;You are probably wrong. Your code is most likely going to be harder to understand and there is plenty that you can spend time as engineering time is finite.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Performance is holistic.&lt;/p&gt;
+
+    &lt;ul&gt;
+      &lt;li&gt;JavasScript, layout, rendering, compositing, GC, etc. can all impact performance.&lt;/li&gt;
+      &lt;li&gt;Newer architectures are moving behaviors out to other threads but this does not work if you try to implement your own behavior. Custom scrolling is the biggest offender here.&lt;/li&gt;
+      &lt;li&gt;Under current Chrome implementations touch handlers can cause scrolling issues as it disables certain scrolling optimizations.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Chrome is the leader in debugging tools and ability to investigate performance&lt;/p&gt;
+
+    &lt;ul&gt;
+      &lt;li&gt;Chrome dev tools timeline panel&lt;/li&gt;
+      &lt;li&gt;about:tracing - Google’s internal performance tool&lt;/li&gt;
+      &lt;li&gt;V8 tools - In depth V8 profiling tools&lt;/li&gt;
+      &lt;li&gt;Continuous painting mode lets you test performance impact of specific elements or properties&lt;/li&gt;
+      &lt;li&gt;Remote debugging API (This powers Chrome for Android debugging and topcoat performance monitor)&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Higher level &lt;code class=&quot;highlighter-rouge&quot;&gt;console&lt;/code&gt; commands are useful&lt;/p&gt;
+
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;console.time&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;console.group&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;These are not always evil and can help programmers with onboarding&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Topcoat has a turbo mode which attempts to remove layout and style calculation from overhead.&lt;/p&gt;
+
+    &lt;p&gt;All elements have style element and are absolutely positioned. On a personal note this seems a bit overboard for 99% of use cases.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;High-speed cameras can be used in the name of performance testing! :)&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Many V8 specific performance recommendations as well:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;V8 has an optimized/unoptimized state machine that a particular piece of code may jump between.&lt;/p&gt;
+
+    &lt;p&gt;Can’t tell at compile time if something will be promoted to optimized once hot. When profiling should look for &lt;code class=&quot;highlighter-rouge&quot;&gt;*&lt;/code&gt; token next to function names to verify that it’s optimized.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Memory allocation pattern between optimized and unoptimized are dramatically different. Optimized will often remove temp variables wereas unoptimized will have to GC temp variables.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Can monitor state machine with &lt;code class=&quot;highlighter-rouge&quot;&gt;--js-flags=&quot;--trace-deopt --trace-opt-verbose&quot;&lt;/code&gt;. WARN: Very verbose. Pipe &amp;amp; Grep&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;better-tooling&quot;&gt;Better Tooling&lt;/h3&gt;
+&lt;p&gt;Adobe and Google had strong developer tools showings at these conferences.&lt;/p&gt;
+
+&lt;p&gt;Adobe demoed some very cool features for their brackets IDE including:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.youtube.com/watch?v=xAP8CSMEwZ8&amp;amp;feature=player_embedded&quot;&gt;PSDLens&lt;/a&gt; - PSD inspector assistant&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.youtube.com/watch?feature=player_embedded&amp;amp;v=kXTP8XqrSwE&quot;&gt;Response&lt;/a&gt; - Responsive design editor&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/adobe-research/theseus&quot;&gt;Theseus&lt;/a&gt; - Brackets debugger concept&lt;/li&gt;
+  &lt;li&gt;Instabug - Live code inspector with visual unit test executor/generator&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Additionally they covered some of the tools involved with their topcoat project:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://bench.topcoat.io&quot;&gt;Continuous Performance server&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/topcoat/topcoat/blob/master/package.json#L6-27&quot;&gt;Conditional componentized build&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;On the Google front, most of the improvements were in the Chrome Developer Tools including:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Flame charts&lt;/li&gt;
+  &lt;li&gt;Full remote dev tools on Chrome For Android&lt;/li&gt;
+  &lt;li&gt;SASS support, generically via source maps&lt;/li&gt;
+  &lt;li&gt;Live editing with mapped update support&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;javasscript-everywhere&quot;&gt;JavasScript everywhere&lt;/h3&gt;
+&lt;p&gt;One of the other fun themes was the use of JavaScript in more and more places. This included a hacking day on various bots and AR Drones for those who choose those sessions. This culminated with a Nodebot &lt;a href=&quot;http://www.youtube.com/watch?v=KgdyrvWOkUo&quot;&gt;shooting down a NodeCopter&lt;/a&gt; and calls for &lt;a href=&quot;https://twitter.com/horse_js/status/340578333702115329&quot;&gt;Node-based Aircraft Carriers&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;random-coolness&quot;&gt;Random Coolness&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://jankfree.org&quot;&gt;jankfree.org&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://nodesecurity.io&quot;&gt;nodesecurity.io&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://webplatform.org&quot;&gt;webplatform.org&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;@rem demoing game with RTC and getUserMedia&lt;/li&gt;
+  &lt;li&gt;@seb_ly giving an amazing presentation including crowd participation froaway and live coding over VNC&lt;/li&gt;
+  &lt;li&gt;@necolas - Get over yourself. Tech changes every few years and all otoday will likely be moot in a few years.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Outside of the above there we’re a lot of fun and interesting sessions that could be discussed in depth but suffice to say that the JavasScript and Web Development communities are very strong and there is a lot of interesting stuff coming down the pipes.&lt;/p&gt;</content><author><name>Kevin Decker</name></author><category term="Performance" /><category term="Web Development" /><summary type="html">I had the pleasure of attending portions of Google IO, CSS Conf, and JS Conf and wanted to summarize my notes on these conferences. These are my own take aways and may not have been what the presenter intended. If I’m completely off base, please feel free to drop me a line. This is also not inclusive as there are only so many sessions that one can attend :)</summary></entry><entry><title type="html">OSX Frontend Toolchain</title><link href="http://localhost:4000/2013/01/osx-frontend-toolchain/" rel="alternate" type="text/html" title="OSX Frontend Toolchain" /><published>2013-01-30T01:08:10-06:00</published><updated>2013-01-30T01:08:10-06:00</updated><id>http://localhost:4000/2013/01/osx-frontend-toolchain</id><content type="html" xml:base="http://localhost:4000/2013/01/osx-frontend-toolchain/">&lt;p&gt;I’m currently in the middle of inventorying my machine so I can retire the time machine image that has spanned far too many years and far too many machines. Rather than stuffing this in Evernote to be used once I figured I’d post this to the community.&lt;/p&gt;
+
+&lt;p&gt;What other frontend tools are missing? Which ones have better alternatives?&lt;/p&gt;
+
+&lt;h3 id=&quot;editors&quot;&gt;Editors&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;http://www.sublimetext.com/&quot;&gt;SublimeText 2&lt;/a&gt;&lt;/p&gt;
+
+    &lt;p&gt;Common plugins include:&lt;/p&gt;
+
+    &lt;ul&gt;
+      &lt;li&gt;Package Control - Allows all other plugins to be installed&lt;/li&gt;
+      &lt;li&gt;BracketHighlighter&lt;/li&gt;
+      &lt;li&gt;Git&lt;/li&gt;
+      &lt;li&gt;Handlebars.tmBundle&lt;/li&gt;
+      &lt;li&gt;JsFormat&lt;/li&gt;
+      &lt;li&gt;JsHint&lt;/li&gt;
+      &lt;li&gt;PrettyJSON&lt;/li&gt;
+      &lt;li&gt;Stylus&lt;/li&gt;
+      &lt;li&gt;SublimeSaveOnBuild&lt;/li&gt;
+      &lt;li&gt;TrailingSpaces&lt;/li&gt;
+    &lt;/ul&gt;
+
+    &lt;p&gt;Useful config options:&lt;/p&gt;
+
+    &lt;div class=&quot;language-json highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;bold_folder_labels&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;draw_white_space&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;all&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;ensure_newline_at_eof_on_save&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;file_exclude_patterns&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;*.tmproj&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;*.sublime-workspace&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;*.class&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;.DS_Store&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;folder_exclude_patterns&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;.svn&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;.git&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;.hg&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;CVS&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;node_modules&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;highlight_line&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;highlight_modified_tabs&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;rulers&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;tab_size&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;translate_tabs_to_spaces&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;scm&quot;&gt;SCM&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;http://git-scm.com/&quot;&gt;Git Command Line&lt;/a&gt;&lt;/p&gt;
+
+    &lt;p&gt;Your mileage may vary but by far the strongest git client out there.&lt;/p&gt;
+
+    &lt;p&gt;Most common git commands&lt;/p&gt;
+
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;git checkout -b $newBranchName&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;git stash&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;git pull --rebase&lt;/code&gt; (Warn do not do after a branch merge)&lt;/li&gt;
+    &lt;/ul&gt;
+
+    &lt;p&gt;Ensure that your version of git has completions enabled (this might require &lt;a href=&quot;https://gist.github.com/972430&quot;&gt;manual installation&lt;/a&gt;)&lt;/p&gt;
+
+    &lt;p&gt;Customizing your bash prompt for git status is also very helpful:&lt;/p&gt;
+
+    &lt;p&gt;This script whose origin has been lost will output the current branch and change status in your bash profile.&lt;/p&gt;
+
+    &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;function &lt;/span&gt;parse_git_branch &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  git branch --no-color 2&amp;gt; /dev/null | sed -e &lt;span class=&quot;s1&quot;&gt;'/^[^*]/d'&lt;/span&gt; -e &lt;span class=&quot;s1&quot;&gt;'s/* \(.*\)/(\1)/'&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;function &lt;/span&gt;last_two_dirs &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nb&quot;&gt;pwd&lt;/span&gt; |rev| awk -F / &lt;span class=&quot;s1&quot;&gt;'{print $1,$2}'&lt;/span&gt; | rev | sed s_&lt;span class=&quot;se&quot;&gt;\ &lt;/span&gt;_/_
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;nv&quot;&gt;c_cyan&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;tput setaf 6&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;c_red&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;tput setaf 1&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;c_green&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;tput setaf 2&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;c_sgr0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;tput sgr0&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;function &lt;/span&gt;proml &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nv&quot;&gt;PS1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'\h:$(last_two_dirs)\[$(branch_color)\]$(parse_git_branch)\[${c_sgr0}\] \u\$ '&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;function &lt;/span&gt;branch_color&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;if &lt;/span&gt;git rev-parse --git-dir &amp;gt;/dev/null 2&amp;gt;&amp;amp;1
+  &lt;span class=&quot;k&quot;&gt;then
+    &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;color&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;
+    git diff --quiet 2&amp;gt;/dev/null &amp;gt;&amp;amp;2
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[[&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$?&lt;/span&gt; -eq 0 &lt;span class=&quot;o&quot;&gt;]]&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;then
+      &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;color&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;c_cyan&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;else
+      &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;color&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;c_red&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;fi
+  else
+    return &lt;/span&gt;0
+  &lt;span class=&quot;k&quot;&gt;fi
+  &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; -ne &lt;span class=&quot;nv&quot;&gt;$color&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+proml
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;http://rowanj.github.com/gitx/&quot;&gt;Gitx&lt;/a&gt;&lt;/p&gt;
+
+    &lt;p&gt;GUI frontend on various commit related git operations. The staging view is very valuable for doing interactive commits and self-code review at commit time.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;http://www.sourcetreeapp.com/&quot;&gt;SourceTree&lt;/a&gt;&lt;/p&gt;
+
+    &lt;p&gt;General git repository viewer. Helpful for viewing stashed changes that may have accumulated on your local tree.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://github.com/visionmedia/git-extras&quot;&gt;git-extras&lt;/a&gt;&lt;/p&gt;
+
+    &lt;p&gt;A collection of useful tools for doing higher level git commands such as &lt;code class=&quot;highlighter-rouge&quot;&gt;delete-branch&lt;/code&gt;. When installing make sure that the command line tab completion tools to no error out as these are very helpful.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;debugging-and-optimizing&quot;&gt;Debugging and Optimizing&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;http://www.charlesproxy.com/&quot;&gt;Charles&lt;/a&gt;&lt;/p&gt;
+
+    &lt;p&gt;HTTP proxy and debugger with easy to use interface.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;http://iconfactory.com/software/xscope&quot;&gt;xScope&lt;/a&gt;&lt;/p&gt;
+
+    &lt;p&gt;Inspect/measure mocks and final rendered pages.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;http://www.gradient-scanner.com/&quot;&gt;Gradient Scanner&lt;/a&gt;&lt;/p&gt;
+
+    &lt;p&gt;(Shameless plug) Extract CSS gradients from flatted mock images.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;http://pngmini.com/&quot;&gt;ImageAlpha/ImageOptim&lt;/a&gt;&lt;/p&gt;
+
+    &lt;p&gt;Image optimization tools. Performs both lossless and lossy compression of image assets.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;documents&quot;&gt;Documents&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://www.dropbox.com/&quot;&gt;Dropbox&lt;/a&gt;&lt;/p&gt;
+
+    &lt;p&gt;Easy way to backup remotely and share content across the team.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;http://evernote.com/&quot;&gt;Evernote&lt;/a&gt;&lt;/p&gt;
+
+    &lt;p&gt;Free notetaking service.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;MS Office&lt;/p&gt;
+
+    &lt;p&gt;Because somethings you can’t escape.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;http://www.microsoft.com/mac/remote-desktop-client&quot;&gt;MS Remote Desktop Client&lt;/a&gt;&lt;/p&gt;
+
+    &lt;p&gt;Again somethings you can not escape.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;communication&quot;&gt;Communication&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;http://adium.im/&quot;&gt;Adium&lt;/a&gt;&lt;/p&gt;
+
+    &lt;p&gt;Chat over many protocols. Most common among the team are GTalk and AIM.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;http://propaneapp.com/&quot;&gt;Propane&lt;/a&gt;&lt;/p&gt;
+
+    &lt;p&gt;Team chat. Setup growl notifications and stay connected.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;http://beta.skype.com/en/&quot;&gt;Skype&lt;/a&gt;&lt;/p&gt;
+
+    &lt;p&gt;Sometimes you need to use your voice. Horrible at IM.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;http://www.telestream.net/screenflow/overview.htm&quot;&gt;ScreenFlow&lt;/a&gt;&lt;/p&gt;
+
+    &lt;p&gt;Generate screen casts for sharing content with coworkers or debugging transient behaviors.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;system&quot;&gt;System&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;http://www.alfredapp.com/&quot;&gt;Alfred&lt;/a&gt;&lt;/p&gt;
+
+    &lt;p&gt;Search-based system launcher.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;http://growl.info/&quot;&gt;Growl&lt;/a&gt;&lt;/p&gt;
+
+    &lt;p&gt;Common notification system for Lumbar builds and Propane and others.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;http://mizage.com/divvy/&quot;&gt;Divvy&lt;/a&gt;&lt;/p&gt;
+
+    &lt;p&gt;Window position manager&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;http://cordlessdog.com/stay/&quot;&gt;Stay&lt;/a&gt;&lt;/p&gt;
+
+    &lt;p&gt;Utility which will restore your windows when you connect or disconnect a monitor.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;http://www.boastr.de/&quot;&gt;BetterTouchTool&lt;/a&gt;&lt;/p&gt;
+
+    &lt;p&gt;Keyboard/mouse/touchpad gesture mapper.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;http://getcloudapp.com/&quot;&gt;Cloud App&lt;/a&gt;&lt;/p&gt;
+
+    &lt;p&gt;Dirt simple screenshot sharing app. Useful for sharing screenshots and other local content over IM and email when attachments might not be supported or supported easily.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;http://mxcl.github.com/homebrew/&quot;&gt;Homebrew&lt;/a&gt;&lt;/p&gt;
+
+    &lt;p&gt;OSS package manager.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://github.com/creationix/nvm&quot;&gt;nvm&lt;/a&gt;&lt;/p&gt;
+
+    &lt;p&gt;Node version switcher. Easily allows for switching between different versions of node.&lt;/p&gt;
+
+    &lt;p&gt;Current recommendations for the latest 0.8 node branch for running the development build stack as the watch issues on the 0.8 branch seem to have been resolved.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;</content><author><name>Kevin Decker</name></author><category term="debugging" /><category term="Lumbar" /><category term="toolchain" /><category term="Web Development" /><summary type="html">I’m currently in the middle of inventorying my machine so I can retire the time machine image that has spanned far too many years and far too many machines. Rather than stuffing this in Evernote to be used once I figured I’d post this to the community.</summary></entry><entry><title type="html">Lumbar: Modular Javascript Build</title><link href="http://localhost:4000/2012/01/lumbar-modular-javascript-build/" rel="alternate" type="text/html" title="Lumbar: Modular Javascript Build" /><published>2012-01-17T12:01:22-06:00</published><updated>2012-01-17T12:01:22-06:00</updated><id>http://localhost:4000/2012/01/lumbar-modular-javascript-build</id><content type="html" xml:base="http://localhost:4000/2012/01/lumbar-modular-javascript-build/">&lt;p&gt;Since joining @WalmartLab’s mobile web team close to a year ago we have been very busy rebuilding the mobile web platform using Backbone, Handlebars, Stylus and other awesome open source tools and frameworks&lt;/p&gt;
+
+&lt;p&gt;Even though these tools allow for some pretty impressive feats of javascript, we kept hitting inefficiencies both in execution and developer time due to resource loading and management.&lt;/p&gt;
+
+&lt;p&gt;When dealing with handlebars for example, we consistently found that we were trying to fight against the system to manage the templates used by a view. We neither wanted to manually inline the template in the javascript as we all know that escaping a language within a language is just painful, ala Java running SQL, nor did we want to add the additional overhead of an additional request for deferred loading of templates or worse inlining all application templates within the html file.&lt;/p&gt;
+
+&lt;p&gt;Being both constrained by the mobile environment and needing to operate at the scale of Walmart it became apparent very quickly that we needed to have some sort of build-time utility to manage this so the developer can focus on creating the application logic, throw it into the build tool and out comes a nicely optimized module of code and styles.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://walmartlabs.github.com/lumbar&quot;&gt;Lumbar&lt;/a&gt; along with the associated Lumbar projects such as &lt;a href=&quot;https://github.com/walmartlabs/lumbar-loader&quot;&gt;lumbar-loader&lt;/a&gt; and &lt;a href=&quot;https://github.com/walmartlabs/lumbar-long-expires&quot;&gt;lumbar-long-expires&lt;/a&gt; are the fruits of these efforts.&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;h2 id=&quot;overview&quot;&gt;Overview&lt;/h2&gt;
+
+&lt;p&gt;The Lumbar suite focuses on the management of all resources required to generate complex javascript applications across many different platforms and environments. It’s primary goals are to easily package, optimize, link to resources such as javascript, html, templates, styles, images, and any other client-side resources that web application may require.&lt;/p&gt;
+
+&lt;p&gt;From it’s initial implementation, Lumbar has focused on making client performance the number one goal, to this end it allows for chunking resources into distinct code modules, easy minification, inlining, and cache management.&lt;/p&gt;
+
+&lt;h2 id=&quot;configuration&quot;&gt;Configuration&lt;/h2&gt;
+
+&lt;p&gt;Lumbar is configured through a simple JSON config file, defining modules which are simple, demand loaded, segments of the application.&lt;/p&gt;
+
+&lt;p&gt;A base module that loads the core application:&lt;/p&gt;
+
+&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;s2&quot;&gt;&quot;base&quot;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&quot;scripts&quot;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;src&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;js/lib/zepto.js&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;global&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;src&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;js/lib/underscore.js&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;global&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;src&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;js/lib/backbone.js&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;global&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;src&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;js/lib/handlebars.js&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;global&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;src&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;js/lib/thorax.js&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;global&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;src&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;js/lib/script.js&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;global&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;src&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;js/lib/lumbar-loader.js&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;platform&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;web&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;src&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;js/lib/lumbar-loader-standard.js&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;platform&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;web&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;src&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;js/lib/lumbar-loader-backbone.js&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;platform&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;web&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
+      &lt;span class=&quot;s2&quot;&gt;&quot;js/init.js&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;src&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;js/bridge.js&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;platforms&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;iphone&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;ipad&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;android&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]},&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;src&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;js/bridge-android.js&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;platform&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;android&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;src&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;js/bridge-ios.js&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;platforms&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;ipad&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;iphone&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]},&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;module-map&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&quot;styles&quot;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+      &lt;span class=&quot;s2&quot;&gt;&quot;styles/base.styl&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;src&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;styles/iphone.styl&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;platform&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;iphone&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;src&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;styles/android.styl&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;platform&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;android&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;src&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;styles/ipad.styl&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;platform&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;ipad&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;src&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;styles/web.styl&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;platform&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;web&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&quot;static&quot;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;src&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;static/#{platform}/index.html&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;dest&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;index.html&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;A router-linked module. When using backbone/thorax integration, this module will automatically load when the # or #hello routes are navigated:&lt;/p&gt;
+
+&lt;div class=&quot;language-json highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;hello-world&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;routes&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;index&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;hello&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;index&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;scripts&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;js/views/hello-world&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;js/routers/hello-world.js&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;styles&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;styles/hello-world.styl&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;This config file also defines the platforms that lumbar will generate, allowing for customizing the modules for different environments (&lt;code class=&quot;highlighter-rouge&quot;&gt;&quot;platforms&quot;: [ &quot;android&quot;, &quot;iphone&quot;, &quot;ipad&quot;, &quot;web&quot; ]&lt;/code&gt;). At @WalmartLabs we utilize this to serve customized experiences for the native clients utilizing the same codebase.&lt;/p&gt;
+
+&lt;figure&gt;
+  
+  &lt;img src=&quot;http://localhost:4000/assets/walmart-checkout-devices.png&quot; alt=&quot;Walmart Checkout Designs&quot; /&gt;
+  
+    &lt;figcaption&gt;Single stylus codebase styled for iPhone, Android, and mobile web platforms.&lt;/figcaption&gt;
+  
+&lt;/figure&gt;
+
+&lt;figure&gt;
+  
+  &lt;img src=&quot;http://localhost:4000/assets/walmart-ipad-checkout.png&quot; alt=&quot;Walmart Checkout - iPad&quot; /&gt;
+  
+    &lt;figcaption&gt;More dramatic customizations of the same codebase utilizing platform conditional code.&lt;/figcaption&gt;
+  
+&lt;/figure&gt;
+
+&lt;p&gt;The final component of the configuration is the packages component, which allows for bundling specific modules into singular responses when a particular use case only uses a subset of modules, such as the native checkout implementations utilized by @WalmartLabs.&lt;/p&gt;
+
+&lt;div class=&quot;language-json highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;s2&quot;&gt;&quot;packages&quot;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;web&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;platforms&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;web&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;combine&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;native-hello-world&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;platforms&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;android&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;iphone&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;ipad&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;modules&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;base&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;hello-world&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;combine&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Package declarations defining normal loading for web and combined for native platforms.&lt;/p&gt;
+
+&lt;p&gt;On building this will generate the following structure:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ find . -type f
+./android/index.html
+./android/native-hello-world.css
+./android/native-hello-world.js
+./android/native-hello-world@1.5x.css
+./ipad/index.html
+./ipad/native-hello-world.css
+./ipad/native-hello-world.js
+./iphone/index.html
+./iphone/native-hello-world.css
+./iphone/native-hello-world.js
+./iphone/native-hello-world@2x.css
+./web/base.css
+./web/base.js
+./web/base@2x.css
+./web/hello-world.css
+./web/hello-world.js
+./web/hello-world@2x.css
+./web/index.html
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Which can be deployed as static resources to any web server, served via a CDN, or distributed by many other means.&lt;/p&gt;
+
+&lt;p&gt;While not a core feature, the &lt;a href=&quot;”https://github.com/walmartlabs/lumbar-long-expires”&quot;&gt;lumbar-long-expires&lt;/a&gt; plugin takes this a step further by allowing resources to include expires tokens in their names automatically. When enabled the above may generate content like the following, allowing for the application resources to be served with extended Expires headers.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ find . -type f
+./android/cb188f8/native-hello-world.css
+./android/cb188f8/native-hello-world.js
+./android/cb188f8/native-hello-world@1.5x.css
+./android/index.html
+./ipad/cb188f8/native-hello-world.css
+./ipad/cb188f8/native-hello-world.js
+./ipad/index.html
+./iphone/cb188f8/native-hello-world.css
+./iphone/cb188f8/native-hello-world.js
+./iphone/cb188f8/native-hello-world@2x.css
+./iphone/index.html
+./web/cb188f8/base.css
+./web/cb188f8/base.js
+./web/cb188f8/base@2x.css
+./web/cb188f8/hello-world.css
+./web/cb188f8/hello-world.js
+./web/cb188f8/hello-world@2x.css
+./web/index.html
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The @WalmartLabs mobile team believes strongly in open source software which is why in addition to open sourcing Lumbar we are also open sourcing our &lt;a href=&quot;http://walmartlabs.github.com/thorax&quot;&gt;Thorax&lt;/a&gt; framework. If you are a backbone user looking to ease common tasks such as data binding and linking&lt;br /&gt;
+data operations to a particular route I urge you to take a look. It even integrates with Lumbar!&lt;/p&gt;</content><author><name>Kevin Decker</name></author><category term="@WalmartLabs" /><category term="HTML5" /><category term="Lumbar" /><category term="Mobile Development" /><category term="Performance" /><summary type="html">Since joining @WalmartLab’s mobile web team close to a year ago we have been very busy rebuilding the mobile web platform using Backbone, Handlebars, Stylus and other awesome open source tools and frameworks Even though these tools allow for some pretty impressive feats of javascript, we kept hitting inefficiencies both in execution and developer time due to resource loading and management. When dealing with handlebars for example, we consistently found that we were trying to fight against the system to manage the templates used by a view. We neither wanted to manually inline the template in the javascript as we all know that escaping a language within a language is just painful, ala Java running SQL, nor did we want to add the additional overhead of an additional request for deferred loading of templates or worse inlining all application templates within the html file. Being both constrained by the mobile environment and needing to operate at the scale of Walmart it became apparent very quickly that we needed to have some sort of build-time utility to manage this so the developer can focus on creating the application logic, throw it into the build tool and out comes a nicely optimized module of code and styles. Lumbar along with the associated Lumbar projects such as lumbar-loader and lumbar-long-expires are the fruits of these efforts.</summary></entry><entry><title type="html">Quick: Firediff and Firefocus updated for 5.0 support</title><link href="http://localhost:4000/2011/07/firediff-and-firefocus-updated-for-5-0-support/" rel="alternate" type="text/html" title="Quick: Firediff and Firefocus updated for 5.0 support" /><published>2011-07-06T21:05:15-05:00</published><updated>2011-07-06T21:05:15-05:00</updated><id>http://localhost:4000/2011/07/firediff-and-firefocus-updated-for-5-0-support</id><content type="html" xml:base="http://localhost:4000/2011/07/firediff-and-firefocus-updated-for-5-0-support/">&lt;p&gt;Both Firediff and Firefocus have been updated to increase the target application support up to Firefox 5.0.&lt;/p&gt;
+
+&lt;p&gt;Both of these are available from the update stream on this site. New installations are recommended to use the &lt;a href=&quot;https://addons.mozilla.org/en-US/firefox/addon/firediff/&quot;&gt;Firediff&lt;/a&gt; and &lt;a href=&quot;https://addons.mozilla.org/en-US/firefox/addon/firefocus/&quot;&gt;Firefocus&lt;/a&gt; projects on AMO as these will be more responsive to the march of Firefox releases.&lt;/p&gt;</content><author><name>Kevin Decker</name></author><category term="debugging" /><category term="Firebug" /><category term="Firediff" /><category term="Firefocus" /><category term="Web Development" /><summary type="html">Both Firediff and Firefocus have been updated to increase the target application support up to Firefox 5.0.</summary></entry><entry><title type="html">Firediff 1.1.2</title><link href="http://localhost:4000/2011/03/firediff-1-1-2/" rel="alternate" type="text/html" title="Firediff 1.1.2" /><published>2011-03-21T23:21:57-05:00</published><updated>2011-03-21T23:21:57-05:00</updated><id>http://localhost:4000/2011/03/firediff-1-1-2</id><content type="html" xml:base="http://localhost:4000/2011/03/firediff-1-1-2/">&lt;p&gt;Just in time for the impending Firefox 4.0 release, Firediff has been updated to version 1.1.2. This release contains compatibility changes for Firefox 4.0 and Firebug 1.7 as well as the ability to sort CSS properties alphabetically&lt;/p&gt;
+
+&lt;p&gt;As always, the latest version is available &lt;a href=&quot;http://incaseofstairs.com/download/firediff/?C=M&quot;&gt;here&lt;/a&gt; and is currently under review at &lt;a href=&quot;https://addons.mozilla.org/en-US/firefox/addon/firediff/&quot;&gt;AMO&lt;/a&gt;.&lt;/p&gt;</content><author><name>Kevin Decker</name></author><category term="Firebug" /><category term="Firediff" /><category term="Web Development" /><summary type="html">Just in time for the impending Firefox 4.0 release, Firediff has been updated to version 1.1.2. This release contains compatibility changes for Firefox 4.0 and Firebug 1.7 as well as the ability to sort CSS properties alphabetically</summary></entry><entry><title type="html">Firediff 1.1.1</title><link href="http://localhost:4000/2010/12/firediff-1-1-1/" rel="alternate" type="text/html" title="Firediff 1.1.1" /><published>2010-12-22T22:24:35-06:00</published><updated>2010-12-22T22:24:35-06:00</updated><id>http://localhost:4000/2010/12/firediff-1-1-1</id><content type="html" xml:base="http://localhost:4000/2010/12/firediff-1-1-1/">&lt;p&gt;Firediff has been updated to 1.1.1 on the incaseofstairs servers. This version is a minor bug release that fixes the Save Diff and Snapshot functionality.&lt;/p&gt;
+
+&lt;p&gt;Updated package is available &lt;a href=&quot;http://www.incaseofstairs.com/download/firediff/firediff1.1.1.xpi&quot;&gt;here&lt;/a&gt; and is under review at &lt;a href=&quot;https://addons.mozilla.org/en-US/firefox/addon/13179/&quot;&gt;AMO&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Thanks to Borris and Joel for letting me know about this issue. Feel free to contact me with any other issues you may have found.&lt;/p&gt;</content><author><name>Kevin Decker</name></author><summary type="html">Firediff has been updated to 1.1.1 on the incaseofstairs servers. This version is a minor bug release that fixes the Save Diff and Snapshot functionality.</summary></entry><entry><title type="html">Firebug Extension Updates: Firebug 1.6</title><link href="http://localhost:4000/2010/12/firebug-extension-updates-firebug-1-6/" rel="alternate" type="text/html" title="Firebug Extension Updates: Firebug 1.6" /><published>2010-12-03T00:00:00-06:00</published><updated>2010-12-03T00:00:00-06:00</updated><id>http://localhost:4000/2010/12/firebug-extension-updates-firebug-1-6</id><content type="html" xml:base="http://localhost:4000/2010/12/firebug-extension-updates-firebug-1-6/">&lt;p&gt;As many of you are already aware, the recent release of &lt;a href=&quot;http://blog.getfirebug.com/2010/11/29/firebug-1-6-0/&quot;&gt;Firebug 1.6&lt;/a&gt; introduced some API changes that caused breakages within &lt;a href=&quot;http://www.incaseofstairs.com/firediff/&quot;&gt;Firediff&lt;/a&gt;. To fix these some minor code changes within Firediff were necessary, thus the 1.1 release that has just been published.&lt;/p&gt;
+
+&lt;p&gt;Along with the updates for the new APIs, this version also includes:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Copy support&lt;/li&gt;
+  &lt;li&gt;Bug fixes for Firebug detached mode&lt;/li&gt;
+  &lt;li&gt;Change monitor context menu fixes&lt;/li&gt;
+  &lt;li&gt;Slight adjustment to the colors used within the text diffs&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;There are a few support changes in this release. Rather than trying to support multiple versions of both Firebug and Gecko, official testing is limited to a single version of Firebug, 1.6, and as a consequence for Firebug 1.6 to a single version of Firefox, 3.6. This is simply due to the increased QA time that is required to test all of the permutations of Firebug version, Gecko version, and OS type. When updating for the changed APIs in Firebug 1.6 attempts were made to maintain compatibility with Firebug 1.5, but this configuration is no longer officially tested.&lt;/p&gt;
+
+&lt;p&gt;Since I was going to through the release process for Firediff I decided to release the 1.2 version of &lt;a href=&quot;http://www.incaseofstairs.com/firefocus/&quot;&gt;Firefocus&lt;/a&gt; as well. This version implements the uk-UA locale but is otherwise the same as 1.1.&lt;/p&gt;
+
+&lt;p&gt;Firediff 1.1 is available &lt;a href=&quot;http://www.incaseofstairs.com/download/firediff/firediff1.1.xpi&quot;&gt;here&lt;/a&gt; on incaseofstairs and is currently under review on &lt;a href=&quot;https://addons.mozilla.org/en-US/firefox/addon/13179/&quot;&gt;AMO&lt;/a&gt;.&lt;br /&gt;
+Firefocus 1.2 is available &lt;a href=&quot;http://www.incaseofstairs.com/download/firefocus/firefocus1.2.xpi&quot;&gt;here&lt;/a&gt; on incaseofstairs and is currently under review on &lt;a href=&quot;https://addons.mozilla.org/en-US/firefox/addon/49662/&quot;&gt;AMO&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Thanks to everyone who notified me of the breakage when 1.6 was released. It’s great to hear feedback from users and to hear that the project is in active use! As always please do not hesitate to let me know how the project is working for you, good or bad.&lt;/p&gt;</content><author><name>Kevin Decker</name></author><category term="Firebug" /><category term="Firediff" /><category term="Firefocus" /><category term="Web Development" /><summary type="html">As many of you are already aware, the recent release of Firebug 1.6 introduced some API changes that caused breakages within Firediff. To fix these some minor code changes within Firediff were necessary, thus the 1.1 release that has just been published.</summary></entry><entry><title type="html">Cross Platform Text-Indexer</title><link href="http://localhost:4000/2010/11/text-indexer/" rel="alternate" type="text/html" title="Cross Platform Text-Indexer" /><published>2010-11-25T13:05:29-06:00</published><updated>2010-11-25T13:05:29-06:00</updated><id>http://localhost:4000/2010/11/text-indexer</id><content type="html" xml:base="http://localhost:4000/2010/11/text-indexer/">&lt;p&gt;While working on a recent Facebook release we ran into a performance bottleneck within the &lt;code class=&quot;highlighter-rouge&quot;&gt;Mojo.Format.runTextIndexer&lt;/code&gt; API. Performance on device was on the order of a couple of seconds to process the content for feed items 30-50. This combined with the other tasks in the formatting and rendering cycle led to poor performance in the news stream.&lt;/p&gt;
+
+&lt;p&gt;For those who are not familiar with the &lt;code class=&quot;highlighter-rouge&quot;&gt;Mojo.Format.runTextIndexer&lt;/code&gt; API, this API scans human generated text for URLs, phone numbers and email addresses, replacing the plain text representation with HTML links to the particular object. Additionally this API will replace emoticons with image representations on supporting platforms.&lt;/p&gt;
+
+&lt;p&gt;With the news stream scene being the primary scene in the application it was vital that we make this as performant as possible so I spent some time profiling this and determined that the bulk of the time in this operation was spent in the generic C indexer logic. Since at it’s core this is just a text scanning heuristic that, for the most part, does not rely on any C-level constructs, I decided to investigate a Javascript implementation to see if this would be more performant.&lt;/p&gt;
+
+&lt;p&gt;The result was a Javascript implementation that was many magnitudes faster than the core implementation (multiple seconds vs. ~10ms for a variety of Facebook news feeds), allowing for much faster execution as well as the creation of the library being released today.&lt;/p&gt;
+
+&lt;p&gt;While this library is designed primarily for webOS applications, it has also been designed to work in cross-platform environments for all functionality other than the emoticon replacement which requires platform specific logic to determine the proper image to replace.&lt;/p&gt;
+
+&lt;h3 id=&quot;implementation&quot;&gt;Implementation&lt;/h3&gt;
+
+&lt;p&gt;There are two key components to this implementation, the cross platform link indexer and the platform specific emoticon processor.&lt;/p&gt;
+
+&lt;p&gt;The link indexer is a two-stage regular expression, using the quite daunting &lt;a href=&quot;https://github.com/kpdecker/text-indexer/blob/d8c4f396d90300ef63846a132462508f23d72265/text-indexer.js#L22&quot;&gt;INDEXER_REGEX&lt;/a&gt; regex to extract possible linker tokens with Javascript being used to determine the meaning of each token (or throwing it out just text content).&lt;/p&gt;
+
+&lt;p&gt;The emoticon processor is implemented by scanning for known, or possibly known, emoticons using the &lt;a href=&quot;https://github.com/kpdecker/text-indexer/blob/d8c4f396d90300ef63846a132462508f23d72265/text-indexer.js#L6&quot;&gt;EMOTICON_REGEX&lt;/a&gt; regex and then passing these tokens to the platform’s text indexer implementation. Doing this allows for our own custom implementation while retaining the look and feel of emoticons used by the rest of the platform. For non-Mojo platforms this logic is disabled and emoticons will be left unmodified, with minimal change.&lt;/p&gt;
+
+&lt;h3 id=&quot;warnings&quot;&gt;Warnings&lt;/h3&gt;
+&lt;h4 id=&quot;html-content&quot;&gt;HTML Content&lt;/h4&gt;
+
+&lt;p&gt;Like the API this aims to replace, this API does not handle HTML context when replacing content. As a consequence this algorithm can break HTML content. In order to prevent this, the input and outputs for the &lt;code class=&quot;highlighter-rouge&quot;&gt;TextIndxer.run&lt;/code&gt; API should be considered text or minimal HTML that will not match any of the replacements.&lt;/p&gt;
+
+&lt;p&gt;It is still possible to use this with content containing HTML by processing in a manner similar to the following although the input still needs to be filtered for XSS and other security concerns.&lt;/p&gt;
+
+&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;srcText&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;val&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(),&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;womb&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'&amp;lt;div&amp;gt;'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;srcText&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'&amp;lt;div&amp;gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+&lt;span class=&quot;nx&quot;&gt;womb&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;contents&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;filter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;nodeType&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Node&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;TEXT_NODE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;each&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;text&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+            &lt;span class=&quot;nx&quot;&gt;indexedText&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;TextIndexer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()),&lt;/span&gt;
+            &lt;span class=&quot;nx&quot;&gt;womb&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'&amp;lt;div&amp;gt;'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;indexedText&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'&amp;lt;div&amp;gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;nx&quot;&gt;womb&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;contents&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;each&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;nx&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;before&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+
+        &lt;span class=&quot;nx&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;remove&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+
+&lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'#previewContent'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;html&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;womb&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;html&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;());&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h4 id=&quot;framework-override&quot;&gt;Framework Override&lt;/h4&gt;
+
+&lt;p&gt;By default this library overrides the &lt;code class=&quot;highlighter-rouge&quot;&gt;Mojo.Format.runTextIndexer&lt;/code&gt; API (when used within the Mojo framework). Care should be taken with each OS upgrade to ensure that this override does not break any expected behavior. If uncomfortable with this override then it can be removed by removing these lines from the library and using the &lt;code class=&quot;highlighter-rouge&quot;&gt;TextIndexer.run&lt;/code&gt; API directly.&lt;/p&gt;
+
+&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// Mojo Framework override. Unused on non-Mojo platforms and may be removed if undesired in Mojo apps&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;window&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;Mojo&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;amp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;amp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Mojo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;Format&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// Override the Mojo API if it exists in this context.&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;Mojo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;Format&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;runTextIndexer&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;TextIndexer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h4 id=&quot;code&quot;&gt;Code&lt;/h4&gt;
+
+&lt;p&gt;The code is available on Github within the &lt;a href=&quot;https://github.com/kpdecker/text-indexer&quot;&gt;text-indexer&lt;/a&gt; repository. A cross-platform live demo is also available &lt;a href=&quot;http://demo.incaseofstairs.com/indexer/index.html&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;</content><author><name>Kevin Decker</name></author><category term="Mobile Development" /><category term="Performance" /><category term="Web Development" /><category term="webOS" /><summary type="html">While working on a recent Facebook release we ran into a performance bottleneck within the Mojo.Format.runTextIndexer API. Performance on device was on the order of a couple of seconds to process the content for feed items 30-50. This combined with the other tasks in the formatting and rendering cycle led to poor performance in the news stream.</summary></entry><entry><title type="html">jsPerf</title><link href="http://localhost:4000/2010/08/jsperf/" rel="alternate" type="text/html" title="jsPerf" /><published>2010-08-01T17:06:35-05:00</published><updated>2010-08-01T17:06:35-05:00</updated><id>http://localhost:4000/2010/08/jsperf</id><content type="html" xml:base="http://localhost:4000/2010/08/jsperf/">&lt;p&gt;Recently heard about the relatively new &lt;a href=&quot;http://jsperf.com/&quot;&gt;jsPerf&lt;/a&gt; service that &lt;a href=&quot;http://mathiasbynens.be/&quot;&gt;Mathias Bynens&lt;/a&gt; has created and after spending some time playing around with this on my own machine I can honestly say that I love this service. Rather than a few gushing tweets on the subject, I felt like this deserves a blog entry covering it’s coolness.&lt;/p&gt;
+
+&lt;p&gt;The thing that I found the most striking about the site (and most likely the reason that I am writing this now) is that it broke many of my previous assumptions about performance of specific statements and relative performance of different platforms. Is innerHTML faster than DOM manipulation when generating a DOM tree? Not for a &lt;a href=&quot;http://jsperf.com/innerclone&quot;&gt;specific (relatively simple) construct&lt;/a&gt; under Chrome (OS X v5). Is array.join(‘’) the fastest way to concat a string. On my test platforms (OS X Firefox, Safari, Opera, Chrome release versions), &lt;a href=&quot;http://jsperf.com/string-concatenation/2&quot;&gt;nope&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Being a public playground, the community benefits from the collective knowledge. Scanning through the &lt;a href=&quot;http://jsperf.com/browse&quot;&gt;test list&lt;/a&gt; I saw many of the problems that I have run into before as well as some I had never considered such as the &lt;a href=&quot;http://jsperf.com/rounding-numbers-down/3&quot;&gt;multiple methods&lt;/a&gt; of performing a Math.floor operation. While some of these honestly scare me and remind me of Kernel code, it’s good to know they exist.&lt;/p&gt;
+
+&lt;p&gt;jsPerf has full support for mobile browsers as well, meaning that you can test performance test the various algorithm options on device and have a realistic view of how it will behave on the device. In running some of the tests on a webOS device there were some quite distinct differences between comparable environments on a desktop class machine.&lt;/p&gt;
+
+&lt;p&gt;As with any performance testing I would recommend running these tests multiple times on your target device(s) before selecting a particular path to use as there are many things that could cause a single test to provide inaccurate results for a given execution, particularly on the more resource constrained environments.&lt;/p&gt;
+
+&lt;p&gt;Great job Mathias and can’t wait to see what features are added to this as well as the content that the community creates!&lt;/p&gt;</content><author><name>Kevin Decker</name></author><category term="Performance" /><category term="Web Development" /><summary type="html">Recently heard about the relatively new jsPerf service that Mathias Bynens has created and after spending some time playing around with this on my own machine I can honestly say that I love this service. Rather than a few gushing tweets on the subject, I felt like this deserves a blog entry covering it’s coolness.</summary></entry></feed>
