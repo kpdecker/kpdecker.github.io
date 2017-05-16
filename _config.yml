@@ -36,11 +36,16 @@ kramdown:
  hard_wrap: false
 
 theme: minima
+autoprefixer:
+  browsers:
+  - last 2 versions
+
 gems:
   - jekyll-feed
   - jekyll-avatar
   - jekyll-redirect-from
   - jekyll-paginate
+  - jekyll-autoprefixer
 
 exclude:
   - Gemfile
