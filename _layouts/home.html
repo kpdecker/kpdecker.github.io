@@ -3,24 +3,39 @@ layout: default
 ---
 
 <div class="portfolio-header"></div>
-<div class="home centered-content">
-  <h1 class="page-heading">Posts</h1>
-  
-  {{ content }}
+<div class="post centered-content">
+  <h2>About</h2>
 
-  <ul class="post-list">
-    {% for post in site.posts %}
-      <li>
-        {% assign date_format = site.minima.date_format | default: "%b %-d, %Y" %}
-        <span class="post-meta">{{ post.date | date: date_format }}</span>
+  <p>
+  Hi!
+  Bacon ipsum dolor amet filet mignon biltong bacon meatball. Turducken andouille cupim biltong shoulder ball tip, ribeye porchetta spare ribs chuck bresaola kevin frankfurter. Pancetta pork meatloaf short loin, chuck turkey beef ribs spare ribs t-bone brisket landjaeger porchetta chicken cupim corned beef. Turkey pastrami salami prosciutto ham beef ribs andouille pork chop.
+  </p>
 
-        <h2>
-          <a class="post-link" href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
-        </h2>
-      </li>
-    {% endfor %}
+  <p>
+  Cupim ground round ham cow bresaola andouille sausage brisket rump pig beef ribs. Turducken alcatra ham hock pork bacon boudin picanha salami flank, tenderloin kevin sausage. Turducken meatball andouille porchetta biltong turkey pig frankfurter tri-tip cupim cow ball tip. Pork chop porchetta biltong, cow leberkas pig chicken sausage cupim salami short loin. Pork loin tenderloin tongue, tail prosciutto ribeye bacon biltong pastrami.
+  </p>
+
+  <h2>Projects</h2>  
+  <ul class="project-list">
+  {% for project in site.data.projects %}
+    {% assign redirect = project.href %}
+    {% assign url = project.path | relative_url %}
+
+    <li>
+      <div class="mdl-card">
+        <div class="mdl-card__title">
+          <span class="mdl-card__title-text">{{ project.title | escape }}</span>
+        </div>
+        <div class="mdl-card__media">
+          <img src="{{ site.url }}/{{ project.logo }}">
+        </div>
+        <div class="mdl-card__actions">
+          <a href="{{ redirect | default: url }}" class="mdl-button mdl-button--colored">
+            More Info
+          </a>
+        </div>
+      </div>
+    </li>
+  {% endfor %}
   </ul>
-
-  <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | relative_url }}">via RSS</a></p>
-
 </div>

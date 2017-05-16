@@ -82,6 +82,38 @@ hr {
   font-weight: 400;
 }
 
+.project-list {
+  list-style: none;
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  margin-left: 0 !important; // Look away!
+
+  .mdl-card__title {
+    color: inherit;
+  }
+  .mdl-card {
+    margin-right: 0.5 * $spacing-unit;
+    margin-bottom: 0.5 * $spacing-unit;
+    background: darken($background-color, 10%);
+  }
+  .mdl-card__media {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+    padding: 0.5 * $spacing-unit;
+
+    background: darken($background-color, 20%);
+
+    > img {
+      max-height: 100%;
+    }
+  }
+}
+
 .post-list {
   list-style: none;
   padding: 0;
