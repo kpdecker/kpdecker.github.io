@@ -19,6 +19,12 @@ a:visited {
   text-decoration: none;
 }
 
+
+hr {
+  margin-top: 0.5 * $spacing-unit;
+  margin-bottom: $spacing-unit;
+}
+
 .mdl-layout__header {
   background: $header-color;
 
