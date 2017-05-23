@@ -1,0 +1,54 @@
+==================================================================
+https://keybase.io/kpdecker
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://kpdecker.github.io
+  * I am kpdecker (https://keybase.io/kpdecker) on keybase.
+  * I have a public key ASCmQDlX2nLMCqt7JrZ2cjWLVamXlHyuR9OYXP9X1X4Z4go
+
+To do so, I am signing this object:
+
+{
+    "body": {
+        "key": {
+            "eldest_kid": "0120a6403957da72cc0aab7b26b67672358b55a997947cae47d3985cff57d57e19e20a",
+            "host": "keybase.io",
+            "kid": "0120a6403957da72cc0aab7b26b67672358b55a997947cae47d3985cff57d57e19e20a",
+            "uid": "4f03c8adca6d9aba0c646e12ebcc6919",
+            "username": "kpdecker"
+        },
+        "service": {
+            "hostname": "kpdecker.github.io",
+            "protocol": "https:"
+        },
+        "type": "web_service_binding",
+        "version": 1
+    },
+    "client": {
+        "name": "keybase.io go client",
+        "version": "1.0.22"
+    },
+    "ctime": 1495580526,
+    "expire_in": 504576000,
+    "merkle_root": {
+        "ctime": 1495580489,
+        "hash": "abd0a0161df4da2c33cd62855c307b94d5690014a29aca886c9bb536cc9efa1d290d16532d5a052fb48297874b52a242b50a42f74b088efd7640fe153571cfea",
+        "seqno": 1105140
+    },
+    "prev": "b5ba9163f8a3db8b1bec95556b2b0ba0fb745bd886a6b2f6e8fcc69ed8c0e2da",
+    "seqno": 8,
+    "tag": "signature"
+}
+
+which yields the signature:
+
+hKRib2R5hqhkZXRhY2hlZMOpaGFzaF90eXBlCqNrZXnEIwEgpkA5V9pyzAqreya2dnI1i1Wpl5R8rkfTmFz/V9V+GeIKp3BheWxvYWTFAvt7ImJvZHkiOnsia2V5Ijp7ImVsZGVzdF9raWQiOiIwMTIwYTY0MDM5NTdkYTcyY2MwYWFiN2IyNmI2NzY3MjM1OGI1NWE5OTc5NDdjYWU0N2QzOTg1Y2ZmNTdkNTdlMTllMjBhIiwiaG9zdCI6ImtleWJhc2UuaW8iLCJraWQiOiIwMTIwYTY0MDM5NTdkYTcyY2MwYWFiN2IyNmI2NzY3MjM1OGI1NWE5OTc5NDdjYWU0N2QzOTg1Y2ZmNTdkNTdlMTllMjBhIiwidWlkIjoiNGYwM2M4YWRjYTZkOWFiYTBjNjQ2ZTEyZWJjYzY5MTkiLCJ1c2VybmFtZSI6ImtwZGVja2VyIn0sInNlcnZpY2UiOnsiaG9zdG5hbWUiOiJrcGRlY2tlci5naXRodWIuaW8iLCJwcm90b2NvbCI6Imh0dHBzOiJ9LCJ0eXBlIjoid2ViX3NlcnZpY2VfYmluZGluZyIsInZlcnNpb24iOjF9LCJjbGllbnQiOnsibmFtZSI6ImtleWJhc2UuaW8gZ28gY2xpZW50IiwidmVyc2lvbiI6IjEuMC4yMiJ9LCJjdGltZSI6MTQ5NTU4MDUyNiwiZXhwaXJlX2luIjo1MDQ1NzYwMDAsIm1lcmtsZV9yb290Ijp7ImN0aW1lIjoxNDk1NTgwNDg5LCJoYXNoIjoiYWJkMGEwMTYxZGY0ZGEyYzMzY2Q2Mjg1NWMzMDdiOTRkNTY5MDAxNGEyOWFjYTg4NmM5YmI1MzZjYzllZmExZDI5MGQxNjUzMmQ1YTA1MmZiNDgyOTc4NzRiNTJhMjQyYjUwYTQyZjc0YjA4OGVmZDc2NDBmZTE1MzU3MWNmZWEiLCJzZXFubyI6MTEwNTE0MH0sInByZXYiOiJiNWJhOTE2M2Y4YTNkYjhiMWJlYzk1NTU2YjJiMGJhMGZiNzQ1YmQ4ODZhNmIyZjZlOGZjYzY5ZWQ4YzBlMmRhIiwic2Vxbm8iOjgsInRhZyI6InNpZ25hdHVyZSJ9o3NpZ8RA68jJ5FFqrrIFzPiGdU3aQF/MFhPDOZ8yiNUG8s5Z8aJLjr1z23Oo/noPMhjKv2G4EM0pO2L87VrtIG4zlqlpAKhzaWdfdHlwZSCkaGFzaIKkdHlwZQildmFsdWXEIB8A3+vizUhx1JCUPil+TC8HvNIt4mrqkLLT9WAHFBh0o3RhZ80CAqd2ZXJzaW9uAQ==
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/kpdecker
+
+==================================================================
