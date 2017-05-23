@@ -5,7 +5,7 @@
   list-style: none
 }
 .mdl-list__item {
-  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-family: $base-font-family;
   font-size: 16px;
   font-weight: 400;
   letter-spacing: .04em;

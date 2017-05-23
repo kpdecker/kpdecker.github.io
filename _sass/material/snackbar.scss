@@ -13,7 +13,7 @@
   -webkit-justify-content: space-between;
   -ms-flex-pack: justify;
   justify-content: space-between;
-  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-family: $base-font-family;
   will-change: transform;
   -webkit-transform: translate(0, 80px);
   transform: translate(0, 80px);
@@ -63,7 +63,7 @@
   color: rgb(178, 255, 89);
   float: right;
   padding: 14px 24px 14px 12px;
-  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-family: $base-font-family;
   font-size: 14px;
   font-weight: 500;
   text-transform: uppercase;

@@ -49,7 +49,7 @@
 .mdl-layout__title, .mdl-layout-title {
   display: block;
   position: relative;
-  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-family: $base-font-family;
   font-size: 20px;
   line-height: 1;
   letter-spacing: .02em;
@@ -167,7 +167,7 @@
   cursor: pointer;
   font-size: 26px;
   line-height: 56px;
-  font-family: Helvetica, Arial, sans-serif;
+  font-family: $base-font-family;
   margin: 8px 12px;
   top: 0;
   left: 0;
