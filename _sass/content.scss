@@ -1,4 +1,6 @@
 
+$h1-ratio: 2.625;
+
 /**
  * Images
  */
@@ -63,7 +65,7 @@ figcaption {
     font-weight: $base-font-weight;
   }
   h1 {
-    @include relative-font-size(2.625);
+    @include relative-font-size($h1-ratio);
     letter-spacing: -1px;
     line-height: 1;
 
@@ -143,3 +145,28 @@ figcaption {
   }
 }
 
+.post-meta {
+  float: right;
+  @include relative-font-size(1);
+
+  h1 > & {
+    line-height: $base-font-size * $h1-ratio;
+  }
+}
+
+.home {
+  h2 {
+    margin-top: 2 * $spacing-unit;
+  }
+}
+
+.content-card {
+  width: 100%;
+  background: transparent;
+
+  .mdl-card__supporting-text {
+    color: inherit;
+    width: 85%;
+    margin: 0 auto;
+  }
+}

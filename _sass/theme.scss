@@ -115,6 +115,12 @@ hr {
   }
 }
 
+.mdl-card__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
 .post-list {
   list-style: none;
   padding: 0;
@@ -123,10 +129,6 @@ hr {
   h2 {
     margin: 0;
   }
-}
-.post-link {
-  display: block;
-  font-size: 24px;
 }
 
 .post-navigation {
